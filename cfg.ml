@@ -18,6 +18,10 @@ let rec cfgset_of_list l =
   | [] -> CfgSet.empty
   | cfg::tl -> CfgSet.add cfg (cfgset_of_list tl)
 
+let fold f cfg =
+  let (_, cfgset) = cfg in
+  CfgSet.fold f cfgset
+
 let from_list l =
   match l with
   | [] -> failwith "CFG cannot be empty"
@@ -25,7 +29,7 @@ let from_list l =
 
 let string_of_inst i =
   match i with
-  | New (v, s) -> v ^ " = new:" ^ (Site.to_string s) ^ ")"
+  | New (v, s) -> v ^ " = new:" ^ (Site.to_string s)
   | Set (v1, f, v2) -> v1 ^ "." ^ f ^ " = " ^ v2
   | Get (v1, v2, f) -> v1 ^ " = " ^ v2 ^ "." ^ f
   | Call (v, m, args) ->

@@ -1,10 +1,24 @@
-type var = string
+type t = Global.t * Env.t
 
-module LocalMap = Map.Make(struct type t = var let compare = compare end)
+let equal l1 l2 =
+  let (g1, e1) = l1 in
+  let (g2, e2) = l2 in
+  Global.equal g1 g2 && Env.equal e1 e2
 
-type t = Value.t LocalMap.t
+let bot = (Global.bot, Env.bot)
 
-let to_string l =
-  let append_string (k : var) (v : Value.t) s =
-    s ^ "(" ^ k ^ " -> " ^ (Value.to_string v) ^ ")" in
-  LocalMap.fold append_string l ""
+let red l =
+  let (g, e) = l in
+  if Global.equal g Global.bot then
+    bot
+  else if Env.equal e Env.bot then
+    bot
+  else l
+
+let join l1 l2 =
+  let (g1, e1) = l1 in
+  let (g2, e2) = l2 in
+  red (Global.join g1 g2, Env.join e1 e2)
+
+let to_string (g, e) =
+  "(" ^ Global.to_string g ^ ", " ^ Env.to_string e ^ ")"

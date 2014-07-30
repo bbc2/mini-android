@@ -1,9 +1,24 @@
-type activity_stack =
-  | AnyAS
-  | AS of Site.t list
-  | NoAS
+type t = Heap.t * As.t
 
-type t = Heap.t * activity_stack
+let equal g1 g2 =
+  let (h1, a1) = g1 in
+  let (h2, a2) = g2 in
+  Heap.equal h1 h2 && As.equal a1 a2
 
-let to_string (h, _) =
-  "(" ^ Heap.to_string h ^ ", _)"
+let bot = (Heap.bot, As.bot)
+
+let red g =
+  let (h, a) = g in
+  if h = Heap.bot then
+    bot
+  else if a = As.bot then
+    bot
+  else g
+
+let join g1 g2 =
+  let (h1, a1) = g1 in
+  let (h2, a2) = g2 in
+  red (Heap.join h1 h2, As.join a1 a2)
+
+let to_string (h, a) =
+  "(" ^ Heap.to_string h ^ ", " ^ As.to_string a ^ ")"

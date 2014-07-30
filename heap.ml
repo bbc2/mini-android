@@ -1,11 +1,35 @@
 module HeapMap = Map.Make(Site)
 
+type t = Object.t HeapMap.t
+
+let equal = HeapMap.equal Object.equal
+
+let bot = HeapMap.empty
+
+let red h =
+  if HeapMap.exists (fun _ v -> v = Object.bot) h then
+    bot
+  else
+    h
+
+let join h1 h2 =
+  let union _ option_o1 option_o2 =
+    match (option_o1, option_o2) with
+    | (None, None) -> None
+    | (Some o1, None) -> Some o1
+    | (None, Some o2) -> Some o2
+    | (Some o1, Some o2) -> Some (Object.join o1 o2) in
+  HeapMap.merge union h1 h2
+
+let get h k =
+  try
+    HeapMap.find k h
+  with Not_found -> Object.bot
+
 let rec from_list l =
   match l with
   | [] -> HeapMap.empty
   | (k, v)::tl -> HeapMap.add k v (from_list tl)
-
-type t = Object.t HeapMap.t
 
 let to_string h =
   let append_string (k : Site.t) (v : Object.t) s =
