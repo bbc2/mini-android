@@ -6,12 +6,6 @@ let equal = HeapMap.equal Object.equal
 
 let bot = HeapMap.empty
 
-let red h =
-  if HeapMap.exists (fun _ v -> v = Object.bot) h then
-    bot
-  else
-    h
-
 let join h1 h2 =
   let union _ option_o1 option_o2 =
     match (option_o1, option_o2) with
