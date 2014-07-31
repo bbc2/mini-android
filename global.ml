@@ -18,7 +18,7 @@ let red g =
 let join g1 g2 =
   let (h1, a1) = g1 in
   let (h2, a2) = g2 in
-  red (Heap.join h1 h2, As.join a1 a2)
+  (Heap.join h1 h2, As.join a1 a2)
 
 let to_string (h, a) =
   "(" ^ Heap.to_string h ^ ", " ^ As.to_string a ^ ")"

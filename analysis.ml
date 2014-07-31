@@ -44,7 +44,7 @@ let transfer_of i l : Local.t =
 let transfer cfg l =
   let step e l =
     let (_, i, _) = e in
-    Local.join l (transfer_of i l) in
+    Local.red (Local.join l (transfer_of i l)) in
   Cfg.fold step cfg l
 
 let _ =
