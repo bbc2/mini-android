@@ -20,5 +20,10 @@ let join l1 l2 =
   let (g2, e2) = l2 in
   (Global.join g1 g2, Env.join e1 e2)
 
+let get_field l v f =
+  let ((h, _), e) = l in
+  let value = Env.get e v in
+  Heap.get_field h value f
+
 let to_string (g, e) =
   "(" ^ Global.to_string g ^ ", " ^ Env.to_string e ^ ")"

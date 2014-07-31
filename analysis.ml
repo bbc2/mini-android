@@ -11,32 +11,18 @@ let transfer_of i l : Local.t =
   let ((h, a), e) = l in
   match i with
   | Cfg.New (v, s) ->
-    let e_new = Env.EnvMap.singleton v (Value.Sites (Value.SiteSet.singleton s)) in
+    let e_new = Env.from_list [(v, (Value.from_list [s]))] in
     ((Heap.bot, As.bot), e_new)
   | Cfg.Set (v1, f, v2) ->
-    let val1 = Env.get e v1 in
     let val2 = Env.get e v2 in
-    begin
-      match val1 with
-      | Value.None -> Local.bot
-      | Value.Sites ss1 ->
-        let update s h =
-          Heap.HeapMap.add s (Object.ObjectMap.singleton (Field.JField f) val2) h in
-        let h_update = Value.SiteSet.fold update ss1 Heap.bot in
-        ((h_update, As.bot), Env.bot)
-    end
+    let ss1 = Value.get_sites (Env.get e v1) in
+    let update s h = Heap.add_field h s (Field.JField f) val2 in
+    let h_update = Sites.fold update ss1 Heap.bot in
+    ((h_update, As.bot), Env.bot)
   | Cfg.Get (v1, v2, f) ->
-    let val2 = Env.get e v2 in
-    begin
-      match val2 with
-      | Value.None -> Local.bot
-      | Value.Sites ss2 ->
-        let join s v =
-          Value.join v (Object.get (Heap.get h s) (Field.JField f)) in
-        let val_update = Value.SiteSet.fold join ss2 Value.bot in
-        let e_update = Env.EnvMap.singleton v1 val_update in
-        (Global.bot, e_update)
-    end
+    let val_new = Local.get_field l v2 f in
+    let e_new = Env.from_list [(v1, val_new)] in
+    (Global.bot, e_new)
   | _ -> Local.bot (* incorrect *)
 
 let transfer cfg l =
