@@ -1,5 +1,3 @@
-type label = int
-
 let fixpoint transfer l0 =
   let rec iter l =
     let l' = transfer l in
