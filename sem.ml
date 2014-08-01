@@ -17,7 +17,7 @@ and transfer_of_inst i l : Local.t =
     let h_update = Sites.fold update ss1 Heap.bot in
     ((h_update, As.bot), Env.bot)
   | Cfg.Get (v1, v2, f) ->
-    let val_new = Local.get_field l v2 f in
+    let val_new = Local.get_field l v2 (Field.JField f) in
     let e_new = Env.from_list [(v1, val_new)] in
     (Global.bot, e_new)
   | Cfg.Call (v, m, args) ->

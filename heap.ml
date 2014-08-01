@@ -26,7 +26,7 @@ let get h k =
 let get_field h v f =
   let ss = Value.get_sites v in
   let merge s v =
-    Value.join v (Object.get (get h s) (Field.JField f)) in
+    Value.join v (Object.get (get h s) f) in
   Sites.fold merge ss Value.bot
 
 let rec from_list l =
