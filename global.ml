@@ -9,11 +9,7 @@ let bot = (Heap.bot, As.bot)
 
 let red g =
   let (h, a) = g in
-  if h = Heap.bot then
-    bot
-  else if a = As.bot then
-    bot
-  else g
+  (h, a)
 
 let join g1 g2 =
   let (h1, a1) = g1 in

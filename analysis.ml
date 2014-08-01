@@ -9,7 +9,7 @@ let fixpoint transfer l0 =
 
 let _ =
   let h0 = Heap.from_list [(17, Object.from_list [(Field.AField "oij", Value.Sites (Sites.from_list [13; 42]))])] in
-  let a0 = As.AS [] in
+  let a0 = As.from_list [] in
   let g0 = (h0, a0) in
   let e0 = Env.from_list [] in
   let l0 = (g0, e0) in
