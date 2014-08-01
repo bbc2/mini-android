@@ -14,8 +14,10 @@ let join l1 l2 =
 
 let get_field l v f =
   let ((h, _), e) = l in
-  let value = Env.get e v in
-  Heap.get_field h value f
+  let ss = Value.get_sites (Env.get e v) in
+  let merge s v =
+    Value.join v (Heap.get_field h s f) in
+  Sites.fold merge ss Value.bot
 
 let to_string (g, e) =
   "(" ^ Global.to_string g ^ ", " ^ Env.to_string e ^ ")"

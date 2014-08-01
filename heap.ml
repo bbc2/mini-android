@@ -18,16 +18,13 @@ let join h1 h2 =
 let add_field h s f v =
   join h (HeapMap.singleton s (Object.from_list [(f, v)]))
 
-let get h k =
+let get h s =
   try
-    HeapMap.find k h
+    HeapMap.find s h
   with Not_found -> Object.bot
 
-let get_field h v f =
-  let ss = Value.get_sites v in
-  let merge s v =
-    Value.join v (Object.get (get h s) f) in
-  Sites.fold merge ss Value.bot
+let get_field h s f =
+  (Object.get (get h s) f)
 
 let rec from_list l =
   match l with
