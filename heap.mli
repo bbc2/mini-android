@@ -3,7 +3,7 @@
 (** Type of an abstract heap. *)
 type t
 
-(** Tests whether two heaps are equal. *)
+(** Test whether two heaps are equal. *)
 val equal : t -> t -> bool
 
 (** Empty heap. *)
@@ -25,5 +25,5 @@ val get_field : t -> Site.t -> Field.t -> Value.t
 (** Build a heap from an association list. *)
 val from_list : (Site.t * Object.t) list -> t
 
-(** Output a string representation of a heap. *)
+(** String representation of a heap. *)
 val to_string : t -> string

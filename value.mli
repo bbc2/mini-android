@@ -8,10 +8,10 @@ type t =
   | Pending of Pending.t (** Potential pending stacks *)
   | Any (** Anything *)
 
-(** Tests whether two values are equal. *)
+(** Test whether two values are equal. *)
 val equal : t -> t -> bool
 
-(** Undefined. *)
+(** Undefined value. *)
 val bot : t
 
 (** Join of two values. *)
@@ -20,5 +20,5 @@ val join : t -> t -> t
 (** Get the set of sites a value can represent. *)
 val get_sites : t -> Sites.t
 
-(** Output a string representation of a value. *)
+(** String representation of a value. *)
 val to_string : t -> string

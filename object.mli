@@ -3,7 +3,7 @@
 (** Type of an abstract object. *)
 type t
 
-(** Tests whether two objects are equal. *)
+(** Test whether two objects are equal. *)
 val equal : t -> t -> bool
 
 (** Empty object. *)
@@ -18,5 +18,5 @@ val get : t -> Field.t -> Value.t
 (** Build an object from an association list. *)
 val from_list : (Field.t * Value.t) list -> t
 
-(** Output a string representation of an object. *)
+(** String representation of an object. *)
 val to_string : t -> string

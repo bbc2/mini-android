@@ -8,5 +8,5 @@ type t =
 (** Total ordering between field. *)
 val compare : t -> t -> int
 
-(** Output a string representation of a field. *)
+(** String representation of a field. *)
 val to_string : t -> string
