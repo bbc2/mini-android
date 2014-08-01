@@ -3,6 +3,7 @@ type field = string
 type var = string
 type meth = string
 type inst =
+  | Assign of var * string
   | New of var * Site.t
   | Set of var * field * var
   | Get of var * var * field
@@ -29,6 +30,7 @@ let from_list l =
 
 let string_of_inst i =
   match i with
+  | Assign (v, s) -> v ^ " = \"" ^ s ^ "\""
   | New (v, s) -> v ^ " = new:" ^ (Site.to_string s)
   | Set (v1, f, v2) -> v1 ^ "." ^ f ^ " = " ^ v2
   | Get (v1, v2, f) -> v1 ^ " = " ^ v2 ^ "." ^ f

@@ -1,6 +1,9 @@
 type t =
   | None
+  | String of string
   | Sites of Sites.t
+  | Pending of Pending.t
+  | Any
 
 let equal v1 v2 =
   match (v1, v2) with
@@ -14,6 +17,9 @@ let join v1 v2 =
   | (_, None) -> v1
   | (None, _) -> v2
   | (Sites ss1, Sites ss2) -> Sites (Sites.join ss1 ss2)
+  | (String s1, String s2) -> if s1 = s2 then String s1 else Any
+  | (Pending p1, Pending p2) -> Pending (Pending.join p1 p2)
+  | _ -> Any
 
 let get_sites v =
   match v with
@@ -25,5 +31,8 @@ let from_list l =
 
 let to_string v =
   match v with
-  | Sites ss -> Sites.to_string ss
   | None -> "None"
+  | String s -> "\"" ^ s ^ "\""
+  | Sites ss -> Sites.to_string ss
+  | Pending p -> Pending.to_string p
+  | Any -> "Any"
