@@ -1,7 +1,6 @@
 module ObjectMap = Map.Make(Field)
 
 type t = Value.t ObjectMap.t
-let compare = compare
 
 let equal = ObjectMap.equal Value.equal
 
