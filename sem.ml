@@ -30,7 +30,7 @@ let transfer_of_inst i l : Local.t =
     let e_new = Env.from_list [(v, Value.String s)] in
     ((Heap.bot, As.bot), e_new)
   | Cfg.New (v, s) ->
-    let e_new = Env.from_list [(v, (Value.from_list [s]))] in
+    let e_new = Env.from_list [(v, (Value.Sites (Sites.from_list [s])))] in
     ((Heap.bot, As.bot), e_new)
   | Cfg.Set (v1, f, v2) ->
     let val2 = Env.get e v2 in

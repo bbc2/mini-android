@@ -26,9 +26,6 @@ let get_sites v =
   | Sites ss -> ss
   | _ -> Sites.bot
 
-let from_list l =
-  Sites (Sites.from_list l)
-
 let to_string v =
   match v with
   | None -> "None"
