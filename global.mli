@@ -12,5 +12,5 @@ val bot : t
 (** Join of two global states. *)
 val join : t -> t -> t
 
-(** Output a string representation of a global state. *)
+(** String representation of a global state. *)
 val to_string : t -> string
