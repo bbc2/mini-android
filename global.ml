@@ -7,10 +7,6 @@ let equal g1 g2 =
 
 let bot = (Heap.bot, As.bot)
 
-let red g =
-  let (h, a) = g in
-  (h, a)
-
 let join g1 g2 =
   let (h1, a1) = g1 in
   let (h2, a2) = g2 in

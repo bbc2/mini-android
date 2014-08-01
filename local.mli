@@ -9,9 +9,6 @@ val equal : t -> t -> bool
 (** Bottom. *)
 val bot : t
 
-(** Reduction operator. *)
-val red : t -> t
-
 (** Join of two local states. *)
 val join : t -> t -> t
 
