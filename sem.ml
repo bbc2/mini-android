@@ -1,29 +1,4 @@
-exception Wrong_args of int
-
-let check_args_exn n l =
-  if n <> List.length l then
-    raise (Wrong_args n)
-
-let transfer_of_api_exn m v args l =
-  let ((h, _), e) = l in
-  match m with
-  | "startActivity" ->
-    (* Assumption: only one such call per callback. Otherwise, the analysis is
-       potentially incorrect. *)
-    let arg = match args with
-      | [a] -> a
-      | _ -> raise (Wrong_args (List.length args)) in
-    let ss = Value.get_sites (Env.get e v) in
-    let pstack = match Env.get e arg with
-      | Value.String s -> [s]
-      | _ -> [] in
-    let pending = Value.Pending (Pending.from_stack pstack) in
-    let update s h = Heap.add_field h s (Field.AField "pending") pending in
-    let h_update = Sites.fold update ss Heap.bot in
-    ((h_update, As.bot), Env.bot)
-  | _ -> raise Not_found
-
-let transfer_of_inst i l : Local.t =
+let transfer_of_inst api_exn i l : Local.t =
   let ((h, a), e) = l in
   match i with
   | Cfg.Assign (v, s) ->
@@ -44,13 +19,13 @@ let transfer_of_inst i l : Local.t =
     (Global.bot, e_new)
   | Cfg.Call (v, m, args) ->
     try
-      transfer_of_api_exn m v args l
+      api_exn m v args l
     with
-    | Wrong_args n -> failwith (Printf.sprintf "Wrong number of args for %s: %d instead of %d" m n (List.length args))
-    | Not_found -> l
+    | Api.Wrong_args n -> failwith (Printf.sprintf "Wrong number of args for %s: %d instead of %d" m n (List.length args))
+    | Api.Method_not_found -> l
 
-let transfer cfg l =
+let transfer api_exn cfg l =
   let step e l =
     let (_, i, _) = e in
-    Local.join l (transfer_of_inst i l) in
+    Local.join l (transfer_of_inst api_exn i l) in
   Cfg.fold step cfg l
