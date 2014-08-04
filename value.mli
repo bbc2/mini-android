@@ -6,6 +6,7 @@ type t =
   | String of string (** Maybe a string *)
   | Sites of Sites.t (** Potential sites *)
   | Pending of Pending.t (** Potential pending stacks *)
+  | State of State.t (** Potential states *)
   | Any (** Anything *)
 
 (** Test whether two values are equal. *)

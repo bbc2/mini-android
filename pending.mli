@@ -6,6 +6,9 @@ type t
 (** Empty stack set. *)
 val bot : t
 
+(** Test whether two stack sets are equal. *)
+val equal : t -> t -> bool
+
 (** Join of two stack sets. *)
 val join : t -> t -> t
 

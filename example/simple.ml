@@ -5,10 +5,10 @@ let () =
          (Field.AField "oij",
           Value.Sites (Sites.from_list [
               Site.make "Class1" 13;
-              Site.make "Class3" 42]))
-       ]
-      )
-    ] in
+              Site.make "Class3" 42]));
+         (Field.AField "state",
+          Value.State (State.from_state State.Uninit))
+       ])] in
   let a0 = As.from_list [] in
   let g0 = (h0, a0) in
   let e0 = Env.from_list [] in

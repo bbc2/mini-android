@@ -7,6 +7,12 @@ type t =
 
 let max_stack_size = 2
 
+let equal p1 p2 =
+  match (p1, p2) with
+  | (PSet ps1, PSet ps2) ->
+      PSet.equal ps1 ps2
+  | _ -> p1 = p2
+
 let bot = PSet PSet.empty
 
 let join p1 p2 =
