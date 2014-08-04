@@ -1,5 +1,5 @@
 all:
-	ocamlbuild analysis.native
+	ocamlbuild example/simple.native
 
 doc:
 	ocamlbuild mini-android.docdir/index.html
