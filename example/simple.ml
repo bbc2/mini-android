@@ -1,13 +1,22 @@
 let () =
-  let h0 = Heap.from_list [(17, Object.from_list [(Field.AField "oij", Value.Sites (Sites.from_list [13; 42]))])] in
+  let h0 = Heap.from_list [
+      (Site.make "MainActivity" 7,
+       Object.from_list [
+         (Field.AField "oij",
+          Value.Sites (Sites.from_list [
+              Site.make "Class1" 13;
+              Site.make "Class3" 42]))
+       ]
+      )
+    ] in
   let a0 = As.from_list [] in
   let g0 = (h0, a0) in
   let e0 = Env.from_list [] in
   let l0 = (g0, e0) in
   let cfg = Cfg.from_list [
-      (1, Cfg.New ("x", 17), 2);
-      (2, Cfg.New ("x", 42), 3);
-      (3, Cfg.New ("y", 3), 4);
+      (1, Cfg.New ("x", Site.make "Class1" 13), 2);
+      (2, Cfg.New ("x", Site.make "Class2" 17), 3);
+      (3, Cfg.New ("y", Site.make "Class3" 42), 4);
       (4, Cfg.Set ("x", "f", "y"), 5);
       (5, Cfg.Get ("z", "x", "f"), 6);
       (6, Cfg.Assign ("i", "OtherActivity"), 7);

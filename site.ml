@@ -1,5 +1,12 @@
-type t = int
+type t = string * int
 let compare = compare
 
-let to_string =
-  string_of_int
+let make m l =
+  (m, l)
+
+let get_class s =
+  let (m, _) = s in m
+
+let to_string s =
+  let (m, l) = s in
+  Printf.sprintf "%s:%d" m l
