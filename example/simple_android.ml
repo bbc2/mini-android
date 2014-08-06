@@ -8,7 +8,7 @@ let () =
   let g = (h, a) in
   let gc = Gcontext.from_list [(Context.from_global g, g)] in
   let ma_init_cfg = Cfg.from_list [
-      (1, Cfg.New ("x", Site.make "Class1" 1), 2);
+      (1, Cfg.New ("x", "Class1", 1), 2);
       (2, Cfg.Set ("this", "f", "x"), 3);
     ] in
   let app = App.make (App.manifest_from_string "MainActivity")

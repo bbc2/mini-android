@@ -14,9 +14,9 @@ let () =
   let e0 = Env.from_list [] in
   let l0 = (g0, e0) in
   let cfg = Cfg.from_list [
-      (1, Cfg.New ("x", Site.make "Class1" 13), 2);
-      (2, Cfg.New ("x", Site.make "Class2" 17), 3);
-      (3, Cfg.New ("y", Site.make "Class3" 42), 4);
+      (1, Cfg.New ("x", "Class1", 13), 2);
+      (2, Cfg.New ("x", "Class2", 17), 3);
+      (3, Cfg.New ("y", "Class3", 42), 4);
       (4, Cfg.Set ("x", "f", "y"), 5);
       (5, Cfg.Get ("z", "x", "f"), 6);
       (6, Cfg.Assign ("i", "OtherActivity"), 7);

@@ -1,15 +1,22 @@
 type label = int
+
 type field = string
+
 type var = string
+
 type meth = string
+
+type cl = string
+
 type inst =
   | Assign of var * string
-  | New of var * Site.t
+  | New of var * cl * int
   | Set of var * field * var
   | Get of var * var * field
   | Call of var * meth * (var list)
 
 type edge = label * inst * label
+
 module CfgSet = Set.Make(struct type t = edge let compare = compare end)
 
 type t = label * CfgSet.t
@@ -29,14 +36,15 @@ let from_list l =
   | (i, _, _)::_ -> (i, (cfgset_of_list l))
 
 let string_of_inst i =
+  let fmt = Printf.sprintf in
   match i with
-  | Assign (v, s) -> v ^ " = \"" ^ s ^ "\""
-  | New (v, s) -> v ^ " = new " ^ (Site.to_string s)
-  | Set (v1, f, v2) -> v1 ^ "." ^ f ^ " = " ^ v2
-  | Get (v1, v2, f) -> v1 ^ " = " ^ v2 ^ "." ^ f
+  | Assign (v, s) -> fmt "%s = \"%s\"" v s
+  | New (v, cl, id) -> fmt "%s = new:%d %s" v id cl
+  | Set (v1, f, v2) -> fmt "%s.%s = %s" v1 f v2
+  | Get (v1, v2, f) -> fmt "%s = %s.%s" v1 v2 f
   | Call (v, m, args) ->
     let arg_str = List.fold_left (fun s a -> s ^ (if s = "" then "" else ", ") ^ a) "" args in
-    v ^ "." ^ m ^ "(" ^ arg_str ^ ")"
+    fmt "%s.%s(%s)" v m arg_str
 
 let string_of_edge e =
   let (i, instr, o) = e in
