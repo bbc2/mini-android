@@ -13,6 +13,9 @@ type t =
   | State of state (** Exact state *)
   | None (** Undefined *)
 
+(** Total ordering on abstract states. *)
+val compare : t -> t -> int
+
 (** Test whether two abstract states are equal. *)
 val equal : t -> t -> bool
 

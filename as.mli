@@ -6,6 +6,9 @@ type t =
   | AS of Site.t list (** Exact stack *)
   | None (** Undefined *)
 
+(** Total ordering on activity stacks. *)
+val compare : t -> t -> int
+
 (** Test whether two activity stacks are equal. *)
 val equal : t -> t -> bool
 

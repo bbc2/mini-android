@@ -2,6 +2,8 @@ module ObjectMap = Lib.Map.Make(Field)
 
 type t = Value.t ObjectMap.t
 
+let compare = ObjectMap.compare Value.compare
+
 let equal = ObjectMap.equal Value.equal
 
 let bot = ObjectMap.empty

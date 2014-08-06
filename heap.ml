@@ -2,6 +2,8 @@ module HeapMap = Lib.Map.Make(Site)
 
 type t = Object.t HeapMap.t
 
+let compare = HeapMap.compare Object.compare
+
 let equal = HeapMap.equal Object.equal
 
 let bot = HeapMap.empty

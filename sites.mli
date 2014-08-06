@@ -3,6 +3,9 @@
 (** Type of a set of sites. *)
 type t
 
+(** Total ordering on sets of sites. *)
+val compare : t -> t -> int
+
 (** Test whether two sets of sites are equal. *)
 val equal : t -> t -> bool
 

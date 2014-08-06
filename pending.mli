@@ -6,6 +6,9 @@ type t
 (** Empty stack set. *)
 val bot : t
 
+(** Total ordering on stack sets. *)
+val compare : t -> t -> int
+
 (** Test whether two stack sets are equal. *)
 val equal : t -> t -> bool
 

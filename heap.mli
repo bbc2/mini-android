@@ -3,6 +3,9 @@
 (** Type of an abstract heap. *)
 type t
 
+(** Total ordering on heaps. *)
+val compare : t -> t -> int
+
 (** Test whether two heaps are equal. *)
 val equal : t -> t -> bool
 

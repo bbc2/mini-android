@@ -2,7 +2,7 @@
 
 type t = Global.t
 
-let compare = compare
+let compare = Global.compare
 
 let from_global g =
   let (_, a) = g in

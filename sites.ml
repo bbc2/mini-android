@@ -2,6 +2,8 @@ module SiteSet = Lib.Set.Make(Site)
 
 type t = SiteSet.t
 
+let compare = SiteSet.compare
+
 let equal = SiteSet.equal
 
 let bot = SiteSet.empty

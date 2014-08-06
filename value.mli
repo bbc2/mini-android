@@ -9,6 +9,9 @@ type t =
   | State of State.t (** Potential states *)
   | Any (** Anything *)
 
+(** Total ordering on values. *)
+val compare : t -> t -> int
+
 (** Test whether two values are equal. *)
 val equal : t -> t -> bool
 

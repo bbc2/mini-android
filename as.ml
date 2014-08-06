@@ -3,6 +3,8 @@ type t =
   | AS of Site.t list
   | None
 
+let compare = compare
+
 let equal = (=)
 
 let bot = None

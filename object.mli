@@ -3,6 +3,9 @@
 (** Type of an abstract object. *)
 type t
 
+(** Total ordering on objects. *)
+val compare : t -> t -> int
+
 (** Test whether two objects are equal. *)
 val equal : t -> t -> bool
 

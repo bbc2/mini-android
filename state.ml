@@ -9,6 +9,8 @@ type t =
   | State of state
   | None
 
+let compare = compare
+
 let equal = (=)
 
 let bot = None
