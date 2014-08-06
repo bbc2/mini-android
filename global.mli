@@ -1,7 +1,10 @@
-(** Global state. *)
+(** Global state *)
 
 (** Type of a global state. *)
 type t = Heap.t * As.t
+
+(** Total ordering on global states. *)
+val compare : t -> t -> int
 
 (** Test whether two global states are equal. *)
 val equal : t -> t -> bool

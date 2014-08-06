@@ -24,4 +24,4 @@ let () =
     ] in
   print_endline (Local.to_string l0);
   print_endline (Cfg.to_string cfg);
-  print_endline (Local.to_string (Analysis.fixpoint (Sem.transfer Api.transfer_exn cfg) l0))
+  print_endline (Local.to_string (Analysis.fixpoint Local.equal (Sem.transfer Api.transfer_exn cfg) l0))

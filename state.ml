@@ -1,6 +1,7 @@
 type state =
   | Uninit
   | Init
+  | Created
   | Active
 
 type t =
@@ -30,6 +31,7 @@ let string_of_state s =
   match s with
   | Uninit -> "Uninit"
   | Init -> "Init"
+  | Created -> "Created"
   | Active -> "Active"
 
 let to_string s =

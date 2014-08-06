@@ -18,6 +18,9 @@ val bot : t
 (** Join of two values. *)
 val join : t -> t -> t
 
+(** Get the abstract state a value can represent. *)
+val get_state : t -> State.t
+
 (** Get the set of sites a value can represent. *)
 val get_sites : t -> Sites.t
 

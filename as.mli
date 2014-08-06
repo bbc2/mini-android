@@ -1,7 +1,10 @@
 (** Android activity stack *)
 
 (** Type of an activity stack. *)
-type t
+type t =
+  | Any (** Any stack *)
+  | AS of Site.t list (** Exact stack *)
+  | None (** Undefined *)
 
 (** Test whether two activity stacks are equal. *)
 val equal : t -> t -> bool

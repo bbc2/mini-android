@@ -1,4 +1,5 @@
 type t = Heap.t * As.t
+let compare = compare
 
 let equal g1 g2 =
   let (h1, a1) = g1 in

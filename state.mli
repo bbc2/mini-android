@@ -4,10 +4,14 @@
 type state =
   | Uninit (** Uninitialized *)
   | Init (** Initialized *)
+  | Created
   | Active
 
 (** Type of an abstract state. *)
-type t
+type t =
+  | Any (** Any state *)
+  | State of state (** Exact state *)
+  | None (** Undefined *)
 
 (** Test whether two abstract states are equal. *)
 val equal : t -> t -> bool

@@ -25,6 +25,11 @@ let join v1 v2 =
   | (State s1, State s2) -> State (State.join s1 s2)
   | _ -> Any
 
+let get_state v =
+  match v with
+  | State s -> s
+  | _ -> State.bot
+
 let get_sites v =
   match v with
   | Sites ss -> ss
