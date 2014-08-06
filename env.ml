@@ -1,6 +1,6 @@
 type var = string
 
-module EnvMap = Map.Make(struct type t = var let compare = compare end)
+module EnvMap = Lib.Map.Make(struct type t = var let compare = compare end)
 
 type t = Value.t EnvMap.t
 
@@ -22,10 +22,7 @@ let get e k =
     EnvMap.find k e
   with Not_found -> Value.bot
 
-let rec from_list l =
-  match l with
-  | [] -> EnvMap.empty
-  | (k, v)::tl -> EnvMap.add k v (from_list tl)
+let from_list = EnvMap.from_list
 
 let to_string e =
   let append_string (k : var) (v : Value.t) s =

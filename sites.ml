@@ -1,4 +1,4 @@
-module SiteSet = Set.Make(struct type t = Site.t let compare = compare end)
+module SiteSet = Lib.Set.Make(Site)
 
 type t = SiteSet.t
 
@@ -10,10 +10,7 @@ let join = SiteSet.union
 
 let fold = SiteSet.fold
 
-let rec from_list l =
-  match l with
-  | [] -> SiteSet.empty
-  | ss::tl -> SiteSet.add ss (from_list tl)
+let rec from_list = SiteSet.from_list
 
 let to_string ss =
   let append_string site s =

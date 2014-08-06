@@ -10,6 +10,7 @@ Field
 Global
 Gcontext
 Heap
+Lib
 Local
 Object
 Pending

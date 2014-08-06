@@ -1,4 +1,4 @@
-module HeapMap = Map.Make(Site)
+module HeapMap = Lib.Map.Make(Site)
 
 type t = Object.t HeapMap.t
 
@@ -26,10 +26,7 @@ let get h s =
 let get_field h s f =
   (Object.get (get h s) f)
 
-let rec from_list l =
-  match l with
-  | [] -> HeapMap.empty
-  | (k, v)::tl -> HeapMap.add k v (from_list tl)
+let from_list = HeapMap.from_list
 
 let to_string h =
   let append_string (k : Site.t) (v : Object.t) s =

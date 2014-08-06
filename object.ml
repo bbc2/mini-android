@@ -1,4 +1,4 @@
-module ObjectMap = Map.Make(Field)
+module ObjectMap = Lib.Map.Make(Field)
 
 type t = Value.t ObjectMap.t
 
@@ -20,10 +20,7 @@ let get o k =
     ObjectMap.find k o
   with Not_found -> Value.bot
 
-let rec from_list l =
-  match l with
-  | [] -> ObjectMap.empty
-  | (k, v)::tl -> ObjectMap.add k v (from_list tl)
+let from_list = ObjectMap.from_list
 
 let to_string o =
   let append_string (k : Field.t) (v : Value.t) s =
