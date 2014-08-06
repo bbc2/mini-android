@@ -1,0 +1,27 @@
+manifest {
+    MainActivity
+}
+
+class MainActivity {
+    method init() {
+        s = "I am initialized";
+        this.state = s
+    }
+
+    method onCreate() {
+        i = "OtherActivity";
+        this.startActivity(i)
+    }
+
+    method onResume() {
+        a = new A;
+        b = new B;
+        a.f = b;
+        c = a.f
+    }
+}
+
+class OtherActivity {
+    method onCreate() {
+    }
+}
