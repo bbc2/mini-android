@@ -24,5 +24,8 @@ val classes_from_list : (string * methods) list -> classes
 (** Build an app from a manifest and classes. *)
 val make : manifest -> classes -> t
 
+(** Build an app from a mini AST. *)
+val from_ast : Lang.Ast.app -> t
+
 (** Get CFG associated with a class and a method in an application. *)
 val get_method : t -> string -> string -> Cfg.t
