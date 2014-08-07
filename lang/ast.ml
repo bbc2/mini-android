@@ -10,9 +10,11 @@ type var_name = string
 
 type args = var_name list
 
+type label = int
+
 type inst =
   | Assign of var_name * string
-  | New of var_name * class_name
+  | New of var_name * class_name * label
   | Set of var_name * field_name * var_name
   | Get of var_name * var_name * field_name
   | Call of var_name * method_name * args

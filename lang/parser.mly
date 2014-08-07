@@ -1,4 +1,5 @@
-%token Manifest Class Method New
+%token Manifest Class Method
+%token <int> New
 %token LeftPar RightPar LeftCurly RightCurly
 %token Eq Dot Semi Comma
 %token <string> Id
@@ -24,7 +25,7 @@ method_:
 
 inst:
 | v = Id Eq s = Str { Ast.Assign (v, s) }
-| v = Id Eq New c = Id { Ast.New (v, c) }
+| v = Id Eq l = New c = Id { Ast.New (v, c, l) }
 | v1 = Id Dot f = Id Eq v2 = Id { Ast.Set (v1, f, v2) }
 | v1 = Id Eq v2 = Id Dot f = Id { Ast.Get (v1, v2, f) }
 | v = Id Dot m = Id

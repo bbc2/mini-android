@@ -7,7 +7,7 @@ let () =
   let a = As.from_list [s_ma] in
   let g = (h, a) in
   let gc = Gcontext.from_list [(Context.from_global g, g)] in
-  let ma_init_cfg = Cfg.from_list [
+  let ma_init_cfg = Cfg.make 1 3 [
       (1, Cfg.New ("x", "Class1", 1), 2);
       (2, Cfg.Set ("this", "f", "x"), 3);
     ] in

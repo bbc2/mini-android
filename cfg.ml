@@ -19,7 +19,7 @@ type edge = label * inst * label
 
 module CfgSet = Set.Make(struct type t = edge let compare = compare end)
 
-type t = label * CfgSet.t
+type t = label * CfgSet.t * label
 
 let rec cfgset_of_list l =
   match l with
@@ -27,13 +27,13 @@ let rec cfgset_of_list l =
   | cfg::tl -> CfgSet.add cfg (cfgset_of_list tl)
 
 let fold f cfg =
-  let (_, cfgset) = cfg in
+  let (_, cfgset, _) = cfg in
   CfgSet.fold f cfgset
 
-let from_list l =
-  match l with
+let make init final edges =
+  match edges with
   | [] -> failwith "CFG cannot be empty"
-  | (i, _, _)::_ -> (i, (cfgset_of_list l))
+  | _ -> (init, (cfgset_of_list edges), final)
 
 let string_of_inst i =
   let fmt = Printf.sprintf in
@@ -56,5 +56,5 @@ let string_of_cfgset cfgset =
   "{" ^ (CfgSet.fold append_string cfgset "") ^ "}"
 
 let to_string c =
-  let (init, cfgset) = c in
-  "(" ^ (string_of_int init) ^ ", " ^ (string_of_cfgset cfgset) ^ ")"
+  let (init, cfgset, final) = c in
+  Printf.sprintf "(%s, %s, %s)" (string_of_int init) (string_of_cfgset cfgset) (string_of_int final)

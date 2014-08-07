@@ -13,7 +13,7 @@ let () =
   let g0 = (h0, a0) in
   let e0 = Env.from_list [] in
   let l0 = (g0, e0) in
-  let cfg = Cfg.from_list [
+  let cfg = Cfg.make 1 8 [
       (1, Cfg.New ("x", "Class1", 13), 2);
       (2, Cfg.New ("x", "Class2", 17), 3);
       (3, Cfg.New ("y", "Class3", 42), 4);
