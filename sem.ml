@@ -28,4 +28,4 @@ let transfer api_exn cfg l =
   let step e l =
     let (_, i, _) = e in
     Local.join l (transfer_of_inst api_exn i l) in
-  Cfg.fold step cfg l
+  Cfg.fold (fun _ _ l -> l) step cfg l

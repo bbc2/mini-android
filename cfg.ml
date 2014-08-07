@@ -21,9 +21,9 @@ module CfgSet = Lib.Set.Make(struct type t = edge let compare = compare end)
 
 type t = label * CfgSet.t * label
 
-let fold f cfg =
-  let (_, cfgset, _) = cfg in
-  CfgSet.fold f cfgset
+let fold f_cfg f_edge cfg =
+  let (init, cfgset, final) = cfg in
+  f_cfg init final (CfgSet.fold f_edge cfgset)
 
 let make init final edges =
   match edges with
