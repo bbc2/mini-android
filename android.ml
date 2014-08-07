@@ -1,10 +1,5 @@
 type call = Sites.t * string * string * Sites.t list
-module CallSet = Set.Make(struct type t = call let compare = compare end)
-
-let rec callset_from_list l =
-  match l with
-  | [] -> CallSet.empty
-  | c::tl -> CallSet.add c (callset_from_list tl)
+module CallSet = Lib.Set.Make(struct type t = call let compare = compare end)
 
 let lifecycle s st =
   let cl = Site.get_class s in
@@ -14,7 +9,7 @@ let lifecycle s st =
     | State.Init -> [(ss, cl, "onCreate", [])]
     | State.Created -> [(ss, cl, "onResume", [])]
     | State.Active -> [(ss, cl, "onPause", [])] in
-  callset_from_list csl
+  CallSet.from_list csl
 
 let next_lifecycle s state =
   match state with
