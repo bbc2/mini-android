@@ -27,7 +27,4 @@ let get o k =
 
 let from_list = ObjectMap.from_list
 
-let to_string o =
-  let append_string f v s =
-    Printf.sprintf "%s%s%s -> %s" s (if s = "" then "" else ", ") (Field.to_string f) (Value.to_string v) in
-  Printf.sprintf "[%s]" (ObjectMap.fold append_string o "")
+let to_string = ObjectMap.to_string Field.to_string Value.to_string

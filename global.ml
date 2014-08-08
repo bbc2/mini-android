@@ -22,4 +22,4 @@ let join g1 g2 =
   (Heap.join h1 h2, As.join a1 a2)
 
 let to_string (h, a) =
-  "(" ^ Heap.to_string h ^ ", " ^ As.to_string a ^ ")"
+  Printf.sprintf "(%s, %s)" (Heap.to_string h) (As.to_string a)

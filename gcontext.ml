@@ -1,4 +1,4 @@
-module GMap = Map.Make(Context)
+module GMap = Lib.Map.Make(Context)
 
 type t = Global.t GMap.t
 
@@ -18,12 +18,6 @@ let add gc c g =
 
 let fold = GMap.fold
 
-let rec from_list l =
-  match l with
-  | [] -> GMap.empty
-  | (k, v)::tl -> GMap.add k v (from_list tl)
+let from_list = GMap.from_list
 
-let to_string gc =
-  let append_string c g s =
-    s ^ (if s = "" then "" else ", ") ^ (Context.to_string c) ^ " -> " ^ (Global.to_string g) in
-  "[" ^ (fold append_string gc "") ^ "]"
+let to_string = GMap.to_string Context.to_string Global.to_string

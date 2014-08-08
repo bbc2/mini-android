@@ -1,5 +1,5 @@
 module PStack = struct type t = string list let compare = compare end
-module PSet = Set.Make(PStack)
+module PSet = Lib.Set.Make(PStack)
 
 type t =
   | PSet of PSet.t
@@ -44,7 +44,4 @@ let string_of_pstack pstack =
 let to_string p =
   match p with
   | Any -> "Any"
-  | PSet pset ->
-    let append_string pstack s =
-      s ^ (if s = "" then "" else ", ") ^ (string_of_pstack pstack) in
-    "{" ^ (PSet.fold append_string pset "") ^ "}"
+  | PSet pset -> PSet.to_string string_of_pstack pset

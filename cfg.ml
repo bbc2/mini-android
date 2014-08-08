@@ -61,12 +61,9 @@ let string_of_inst i =
 
 let string_of_edge e =
   let (i, instr, o) = e in
-  "(" ^ (string_of_int i) ^ ", " ^ (string_of_inst instr) ^ ", " ^ (string_of_int o) ^ ")"
+  Printf.sprintf "(%s, %s, %s)" (string_of_int i) (string_of_inst instr) (string_of_int o)
 
-let string_of_cfgset cfgset =
-  let append_string e s =
-    s ^ (if s = "" then "" else ", ") ^ string_of_edge e in
-  "{" ^ (CfgSet.fold append_string cfgset "") ^ "}"
+let string_of_cfgset = CfgSet.to_string string_of_edge
 
 let to_string c =
   let (init, cfgset, final) = c in

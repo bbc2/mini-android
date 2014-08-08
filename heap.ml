@@ -33,7 +33,4 @@ let get_field h s f =
 
 let from_list = HeapMap.from_list
 
-let to_string h =
-  let append_string (k : Site.t) (v : Object.t) s =
-    s ^ (if s = "" then "" else ", ") ^ (Site.to_string k) ^ " -> " ^ (Object.to_string v) in
-  "[" ^ (HeapMap.fold append_string h "") ^ "]"
+let to_string = HeapMap.to_string Site.to_string Object.to_string

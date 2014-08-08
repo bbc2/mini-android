@@ -14,7 +14,4 @@ let fold = SiteSet.fold
 
 let rec from_list = SiteSet.from_list
 
-let to_string ss =
-  let append_string site s =
-    s ^ (if s = "" then "" else ", ") ^ Site.to_string site in
-  "{" ^ (fold append_string ss "") ^ "}"
+let to_string = SiteSet.to_string Site.to_string

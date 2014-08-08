@@ -20,4 +20,4 @@ let get_field l v f =
   Sites.fold merge ss Value.bot
 
 let to_string (g, e) =
-  "(" ^ Global.to_string g ^ ", " ^ Env.to_string e ^ ")"
+  Printf.sprintf "(%s, %s)" (Global.to_string g) (Env.to_string e)
