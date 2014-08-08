@@ -21,7 +21,7 @@ let lifecycle g s =
 let next g =
   let (_, a) = g in
   match a with
-  | As.Any -> failwith "Activity stack lost"
+  | As.Any -> failwith "Android.next: Activity stack lost"
   | As.AS al ->
     (* Gather potential calls for each activity in the stack *)
     let add_cs cs s =
@@ -30,7 +30,7 @@ let next g =
   | As.None -> []
 
 let transfer_of_call app g gc call =
-  (* Call args and return value are not taken into accounct. *)
+  (* Call args and return value are not taken into account. *)
   let (s, m, args, update) = call in
   let e_init = Env.from_list [("this", Value.Sites (Sites.from_list [s]))] in
   let l_init = (g, e_init) in
