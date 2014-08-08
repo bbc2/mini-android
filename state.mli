@@ -1,4 +1,4 @@
-(** Activity states *)
+(** Android [state] attribute *)
 
 (** Type of an activity state. *)
 type state =
