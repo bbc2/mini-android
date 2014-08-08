@@ -2,11 +2,11 @@ let () =
   let h0 = Heap.from_list [
       (Site.make "MainActivity" 7,
        Object.from_list [
-         (Field.AField "oij",
+         (Field.Pending,
           Value.Sites (Sites.from_list [
               Site.make "Class1" 13;
               Site.make "Class3" 42]));
-         (Field.AField "state",
+         (Field.State,
           Value.State (State.from_list [State.Uninit]))
        ])] in
   let a0 = As.from_list [] in

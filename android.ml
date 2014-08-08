@@ -2,7 +2,7 @@ type calls = (Site.t * string * Sites.t list * (Global.t -> Global.t)) list
 
 let lifecycle_update s state g =
   let (h, a) = g in
-  let h' = Heap.set_field h s (Field.AField "state") (Value.State (State.from_list [state])) in
+  let h' = Heap.set_field h s Field.State (Value.State (State.from_list [state])) in
   (h', a)
 
 let lifecycle_calls s st calls =
@@ -14,7 +14,7 @@ let lifecycle_calls s st calls =
 
 let lifecycle g s =
   let (h, _) = g in
-  let value = Heap.get_field h s (Field.AField "state") in
+  let value = Heap.get_field h s Field.State in
   let state = Value.get_state value in
   State.fold (lifecycle_calls s) state []
 

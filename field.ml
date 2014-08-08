@@ -1,8 +1,12 @@
-type t = JField of string | AField of string
+type t =
+  | J of string
+  | Pending
+  | State
 
 let compare = compare
 
 let to_string f =
   match f with
-  | JField j -> "j:" ^ j
-  | AField a -> "a:" ^ a
+  | J s -> s
+  | Pending -> "~pending"
+  | State -> "~state"

@@ -2,8 +2,9 @@
 
 (** Type of a field. *)
 type t =
-  | JField of string (** Java field *)
-  | AField of string (** Android field *)
+  | J of string (** Mini Java field *)
+  | Pending (** Android pending field *)
+  | State (** Android state field *)
 
 (** Total ordering between field. *)
 val compare : t -> t -> int

@@ -10,11 +10,11 @@ let transfer_of_inst api_exn i l : Local.t =
   | Cfg.Set (v1, f, v2) ->
     let val2 = Env.get e v2 in
     let ss1 = Value.get_sites (Env.get e v1) in
-    let update s h = Heap.add_field h s (Field.JField f) val2 in
+    let update s h = Heap.add_field h s (Field.J f) val2 in
     let h_update = Sites.fold update ss1 Heap.bot in
     ((h_update, As.bot), Env.bot)
   | Cfg.Get (v1, v2, f) ->
-    let val_new = Local.get_field l v2 (Field.JField f) in
+    let val_new = Local.get_field l v2 (Field.J f) in
     let e_new = Env.from_list [(v1, val_new)] in
     (Global.bot, e_new)
   | Cfg.Call (v, m, args) ->
