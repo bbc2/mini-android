@@ -4,30 +4,21 @@ type state =
   | Created
   | Active
 
-type t =
-  | Any
-  | State of state
-  | None
+module StateSet = Lib.Set.Make(struct type t = state let compare = compare end)
 
-let compare = compare
+type t = StateSet.t
 
-let equal = (=)
+let compare = StateSet.compare
 
-let bot = None
+let equal = StateSet.equal
 
-let join s1 s2 =
-  match (s1, s2) with
-  | (_, None) -> s1
-  | (None, _) -> s2
-  | (State st1, State st2) ->
-      if st1 = st2 then
-        s1
-      else
-        Any
-  | _ -> Any
+let bot = StateSet.empty
 
-let from_state s =
-  State s
+let join = StateSet.union
+
+let fold = StateSet.fold
+
+let from_list = StateSet.from_list
 
 let string_of_state s =
   match s with
@@ -36,8 +27,7 @@ let string_of_state s =
   | Created -> "Created"
   | Active -> "Active"
 
-let to_string s =
-  match s with
-  | Any -> "Any"
-  | State st -> string_of_state st
-  | None -> "None"
+let to_string ss =
+  let append_string state s =
+    Printf.sprintf "%s%s%s" s (if s = "" then "" else ", ") (string_of_state state) in
+  Printf.sprintf "{%s}" (StateSet.fold append_string ss "")

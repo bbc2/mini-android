@@ -1,50 +1,46 @@
-type call = Sites.t * string * string * Sites.t list
-module CallSet = Lib.Set.Make(struct type t = call let compare = compare end)
+type calls = (Site.t * string * Sites.t list * (Global.t -> Global.t)) list
 
-let lifecycle s st =
-  let cl = Site.get_class s in
-  let ss = Sites.from_list [s] in
-  let csl = match st with
-    | State.Uninit -> [(ss, cl, "<init>", [])]
-    | State.Init -> [(ss, cl, "onCreate", [])]
-    | State.Created -> [(ss, cl, "onResume", [])]
-    | State.Active -> [(ss, cl, "onPause", [])] in
-  CallSet.from_list csl
+let lifecycle_update s state g =
+  let (h, a) = g in
+  let h' = Heap.set_field h s (Field.AField "state") (Value.State (State.from_list [state])) in
+  (h', a)
 
-let next_lifecycle s state =
-  match state with
-  | State.Any -> failwith "Activity state lost"
-  | State.State st ->
-    lifecycle s st
-  | State.None -> CallSet.empty
+let lifecycle_calls s st calls =
+  match st with
+  | State.Uninit -> (s, "<init>", [], lifecycle_update s State.Init)::calls
+  | State.Init -> (s, "onCreate", [], lifecycle_update s State.Created)::calls
+  | State.Created -> (s, "onResume", [], lifecycle_update s State.Active)::calls
+  | State.Active -> (s, "onPause", [], lifecycle_update s State.Created)::calls
+
+let lifecycle g s =
+  let (h, _) = g in
+  let value = Heap.get_field h s (Field.AField "state") in
+  let state = Value.get_state value in
+  State.fold (lifecycle_calls s) state []
 
 let next g =
-  let (h, a) = g in
+  let (_, a) = g in
   match a with
   | As.Any -> failwith "Activity stack lost"
   | As.AS al ->
-    let next_lifecycle cs s =
-      let value = Heap.get_field h s (Field.AField "state") in
-      let state = Value.get_state value in
-      CallSet.union cs (next_lifecycle s state) in
-    List.fold_left next_lifecycle CallSet.empty al
-  | As.None -> CallSet.empty
+    (* Gather potential calls for each activity in the stack *)
+    let add_cs cs s =
+      cs @ (lifecycle g s) in
+    List.fold_left add_cs [] al
+  | As.None -> []
 
-let update m g =
-  g
-
-let transfer_of_call app g call gc =
+let transfer_of_call app g gc call =
   (* Call args and return value are not taken into accounct. *)
-  let (s, cl, m, _) = call in
-  let e_init = Env.from_list [("this", Value.Sites s)] in
+  let (s, m, args, update) = call in
+  let e_init = Env.from_list [("this", Value.Sites (Sites.from_list [s]))] in
   let l_init = (g, e_init) in
-  let cfg = App.get_method app cl m in
+  let cfg = App.get_method app (Site.get_class s) m in
   let (g_final, _) = Analysis.fixpoint Local.equal (Sem.transfer Api.transfer_exn cfg) l_init in
-  let g_updated = update m g_final in
+  let g_updated = update g_final in
   Gcontext.add gc (Context.from_global g_updated) g_updated
 
 let transfer_of_context app c g gc =
-  CallSet.fold (transfer_of_call app g) (next g) gc
+  List.fold_left (transfer_of_call app g) gc (next g)
 
 let transfer app gc =
   Gcontext.fold (transfer_of_context app) gc gc

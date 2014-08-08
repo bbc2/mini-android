@@ -27,5 +27,6 @@ val make : manifest -> classes -> t
 (** Build an app from a mini AST. *)
 val from_ast : Lang.Ast.app -> t
 
-(** Get CFG associated with a class and a method in an application. *)
+(** Get CFG associated with a class and a method in an application. Return an
+    empty CFG if it cannot be found. *)
 val get_method : t -> string -> string -> Cfg.t

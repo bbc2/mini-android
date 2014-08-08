@@ -25,6 +25,9 @@ let get h s =
     HeapMap.find s h
   with Not_found -> Object.bot
 
+let set_field h s f v =
+  HeapMap.add s (Object.set (get h s) f v) h
+
 let get_field h s f =
   (Object.get (get h s) f)
 

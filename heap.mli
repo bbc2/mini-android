@@ -19,11 +19,14 @@ val join : t -> t -> t
     update a heap. *)
 val add_field : t -> Site.t -> Field.t -> Value.t -> t
 
-(** Get the object associated with a site in a heap. *)
-val get : t -> Site.t -> Object.t
+(** Set the value associated with a site and a field in a heap. *)
+val set_field : t -> Site.t -> Field.t -> Value.t -> t
 
 (** Get the value associated with a site and a field in a heap. *)
 val get_field : t -> Site.t -> Field.t -> Value.t
+
+(** Get the object associated with a site in a heap. *)
+val get : t -> Site.t -> Object.t
 
 (** Build a heap from an association list. *)
 val from_list : (Site.t * Object.t) list -> t

@@ -17,7 +17,7 @@ let get_init_states app =
   let s_m = Site.make manif 0 in
   let h0 = Heap.from_list [
       (s_m, Object.from_list [
-          (Field.AField "state", Value.State (State.from_state State.Uninit))
+          (Field.AField "state", Value.State (State.from_list [State.Uninit]))
         ])] in
   let g0 = (h0, As.from_list []) in
   InitSet.singleton g0
@@ -41,21 +41,23 @@ let rec methods_from_class cl =
   match cl with
   | [] -> MethMap.empty
   | (name, m)::tl ->
-      let cfg = Cfg.from_ast_insts m in
-      MethMap.add name cfg (methods_from_class tl)
+    let cfg = Cfg.from_ast_insts m in
+    MethMap.add name cfg (methods_from_class tl)
 
 let rec classes_from_prog prog =
   match prog with
   | [] -> ClassMap.empty
   | (name, c)::tl ->
-      let methmap = methods_from_class c in
-      ClassMap.add name methmap (classes_from_prog tl)
+    let methmap = methods_from_class c in
+    ClassMap.add name methmap (classes_from_prog tl)
 
 let from_ast a =
   let (manif, prog) = a in
   make manif (classes_from_prog prog)
 
 let get_method app c m =
-  let (manif, classmap) = app in
-  let methmap = ClassMap.find c classmap in
-  MethMap.find m methmap
+  let (_, classmap) = app in
+  let methmap = try ClassMap.find c classmap
+    with Not_found -> failwith (Printf.sprintf "App.get_method: Class %s not found" c) in
+  try MethMap.find m methmap
+  with Not_found -> Cfg.make 0 0 []

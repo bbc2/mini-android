@@ -7,7 +7,7 @@ let () =
               Site.make "Class1" 13;
               Site.make "Class3" 42]));
          (Field.AField "state",
-          Value.State (State.from_state State.Uninit))
+          Value.State (State.from_list [State.Uninit]))
        ])] in
   let a0 = As.from_list [] in
   let g0 = (h0, a0) in

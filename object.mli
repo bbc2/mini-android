@@ -15,6 +15,9 @@ val bot : t
 (** Join of two objects. *)
 val join : t -> t -> t
 
+(** Set the value associated with a field in an object. *)
+val set : t -> Field.t -> Value.t -> t
+
 (** Get the value associated with a field in an object. *)
 val get : t -> Field.t -> Value.t
 

@@ -17,6 +17,9 @@ let join o1 o2 =
     | (Some v1, Some v2) -> Some (Value.join v1 v2) in
   ObjectMap.merge union o1 o2
 
+let set o f v =
+  ObjectMap.add f v o
+
 let get o k =
   try
     ObjectMap.find k o

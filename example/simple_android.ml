@@ -1,7 +1,7 @@
 let () =
   let s_ma = Site.make "MainActivity" 0 in
   let o_ma = Object.from_list [
-      (Field.AField "state", Value.State (State.State State.Uninit))
+      (Field.AField "state", Value.State (State.from_list [State.Uninit]))
     ] in
   let h = Heap.from_list [(s_ma, o_ma)] in
   let a = As.from_list [s_ma] in
