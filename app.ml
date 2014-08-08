@@ -19,10 +19,11 @@ let get_init_states app =
       (s_m, Object.from_list [
           (Field.State, Value.State (State.from_list [State.Uninit]))
         ])] in
-  let g0 = (h0, As.from_list []) in
+  let g0 = (h0, As.from_list [s_m]) in
   InitSet.singleton g0
 
-let fold_on_init_states = InitSet.fold
+let fold_on_init_states f app =
+  InitSet.fold f (get_init_states app)
 
 let manifest_from_string s =
   s

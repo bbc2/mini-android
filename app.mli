@@ -12,6 +12,9 @@ type classes
 (** Methods of a class. *)
 type methods
 
+(** Fold on initial global states. *)
+val fold_on_init_states : (Global.t -> 'a -> 'a) -> t -> 'a -> 'a
+
 (** Build a manifest from a string. *)
 val manifest_from_string : string -> manifest
 
