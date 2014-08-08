@@ -24,7 +24,4 @@ let get e k =
 
 let from_list = EnvMap.from_list
 
-let to_string e =
-  let append_string (k : var) (v : Value.t) s =
-    s ^ (if s = "" then "" else ", ") ^ k ^ " -> " ^ (Value.to_string v) in
-  "[" ^ (EnvMap.fold append_string e "") ^ "]"
+let to_string = EnvMap.to_string (fun var -> var) Value.to_string
