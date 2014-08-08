@@ -21,6 +21,10 @@ val set : t -> Field.t -> Value.t -> t
 (** Get the value associated with a field in an object. *)
 val get : t -> Field.t -> Value.t
 
+(** [filter p o] returns the map with all the bindings in [o] that satisfy
+    predicate p. *)
+val filter : (Field.t -> Value.t -> bool) -> t -> t
+
 (** Build an object from an association list. *)
 val from_list : (Field.t * Value.t) list -> t
 

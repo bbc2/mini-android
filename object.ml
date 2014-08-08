@@ -25,6 +25,8 @@ let get o k =
     ObjectMap.find k o
   with Not_found -> Value.bot
 
+let filter = ObjectMap.filter
+
 let from_list = ObjectMap.from_list
 
 let to_string = ObjectMap.to_string Field.to_string Value.to_string

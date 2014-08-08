@@ -20,6 +20,9 @@ let join h1 h2 =
 let add_field h s f v =
   join h (HeapMap.singleton s (Object.from_list [(f, v)]))
 
+let set h s o =
+  HeapMap.add s o h
+
 let get h s =
   try
     HeapMap.find s h
@@ -30,6 +33,10 @@ let set_field h s f v =
 
 let get_field h s f =
   (Object.get (get h s) f)
+
+let fold = HeapMap.fold
+
+let filter = HeapMap.filter
 
 let from_list = HeapMap.from_list
 
