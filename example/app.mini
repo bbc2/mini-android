@@ -3,7 +3,7 @@ manifest {
 }
 
 class MainActivity {
-    method init() {
+    method <init>() {
         s = "I am initialized";
         this.state = s
     }
