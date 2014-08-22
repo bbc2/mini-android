@@ -5,7 +5,10 @@ type state =
   | Uninit (** Uninitialized *)
   | Init (** Initialized *)
   | Created
+  | Visible
   | Active
+  | Stopped
+  | Destroyed
 
 (** Type of an abstract state. *)
 type t

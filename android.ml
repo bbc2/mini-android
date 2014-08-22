@@ -7,10 +7,15 @@ let lifecycle_update s state g =
 
 let lifecycle_calls s st calls =
   match st with
-  | State.Uninit -> ((s, "<init>", []), lifecycle_update s State.Init)::calls
-  | State.Init -> ((s, "onCreate", []), lifecycle_update s State.Created)::calls
-  | State.Created -> ((s, "onResume", []), lifecycle_update s State.Active)::calls
-  | State.Active -> ((s, "onPause", []), lifecycle_update s State.Created)::calls
+  | State.Uninit -> ((s, "<init>", []), lifecycle_update s State.Init) :: calls
+  | State.Init -> ((s, "onCreate", []), lifecycle_update s State.Created) :: calls
+  | State.Created -> ((s, "onStart", []), lifecycle_update s State.Visible)
+                     :: ((s, "onStop", []), lifecycle_update s State.Stopped) :: calls
+  | State.Visible -> ((s, "onResume", []), lifecycle_update s State.Active) :: calls
+  | State.Active -> ((s, "onPause", []), lifecycle_update s State.Visible) :: calls
+  | State.Stopped -> ((s, "onRestart", []), lifecycle_update s State.Created)
+                     :: ((s, "onDestroy", []), lifecycle_update s State.Destroyed) :: calls
+  | State.Destroyed -> calls
 
 let lifecycle g s =
   let (h, _) = g in

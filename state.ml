@@ -2,7 +2,10 @@ type state =
   | Uninit
   | Init
   | Created
+  | Visible
   | Active
+  | Stopped
+  | Destroyed
 
 module StateSet = Lib.Set.Make(struct type t = state let compare = compare end)
 
@@ -25,7 +28,10 @@ let string_of_state s =
   | Uninit -> "Uninit"
   | Init -> "Init"
   | Created -> "Created"
+  | Visible -> "Visible"
   | Active -> "Active"
+  | Stopped -> "Stopped"
+  | Destroyed -> "Destroyed"
 
 let to_string ss =
   let append_string state s =
