@@ -42,3 +42,15 @@ module Map = struct
       Printf.sprintf "[%s]" (fold append map "")
   end
 end
+
+let rec list_compare compare l1 l2 =
+  match (l1, l2) with
+  | ([], []) -> 0
+  | (_::_, []) -> 1
+  | ([], _::_) -> -1
+  | (h1::t1, h2::t2) ->
+      let h = compare h1 h2 in
+      if h = 0 then
+        list_compare compare t1 t2
+      else
+        h

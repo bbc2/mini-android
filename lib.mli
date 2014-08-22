@@ -32,3 +32,6 @@ module Map : sig
 
   module Make (Ord : Map.OrderedType) : S with type key = Ord.t
 end
+
+(** Total ordering on lists given a [compare] function on elements. *)
+val list_compare : ('a -> 'a -> int) -> 'a list -> 'a list -> int

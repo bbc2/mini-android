@@ -6,7 +6,7 @@ let () =
   let h = Heap.from_list [(s_ma, o_ma)] in
   let a = As.from_list [s_ma] in
   let g = (h, a) in
-  let gc = Gcontext.from_list [(Context.from_global g, g)] in
+  let gc = Gcontext.from_list [(Context.from_global g, (g, Nexts.bot))] in
   let ma_init_cfg = Cfg.make 1 3 [
       (1, Cfg.New ("x", "Class1", 1), 2);
       (2, Cfg.Set ("this", "f", "x"), 3);

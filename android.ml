@@ -7,10 +7,10 @@ let lifecycle_update s state g =
 
 let lifecycle_calls s st calls =
   match st with
-  | State.Uninit -> (s, "<init>", [], lifecycle_update s State.Init)::calls
-  | State.Init -> (s, "onCreate", [], lifecycle_update s State.Created)::calls
-  | State.Created -> (s, "onResume", [], lifecycle_update s State.Active)::calls
-  | State.Active -> (s, "onPause", [], lifecycle_update s State.Created)::calls
+  | State.Uninit -> ((s, "<init>", []), lifecycle_update s State.Init)::calls
+  | State.Init -> ((s, "onCreate", []), lifecycle_update s State.Created)::calls
+  | State.Created -> ((s, "onResume", []), lifecycle_update s State.Active)::calls
+  | State.Active -> ((s, "onPause", []), lifecycle_update s State.Created)::calls
 
 let lifecycle g s =
   let (h, _) = g in
@@ -29,17 +29,20 @@ let next g =
     List.fold_left add_cs [] al
   | As.None -> []
 
-let transfer_of_call app g gc call =
+let transfer_of_call app g gc transition =
   (* Call args and return value are not taken into account. *)
-  let (s, m, args, update) = call in
+  let ((s, m, args), update) = transition in
   let e_init = Env.from_list [("this", Value.Sites (Sites.from_list [s]))] in
   let l_init = (g, e_init) in
   let cfg = App.get_method app (Site.get_class s) m in
   let (g_final, _) = Analysis.fixpoint Local.equal (Sem.transfer Api.transfer_exn cfg) l_init in
   let g_updated = update g_final in
-  Gcontext.add gc (Context.from_global g_updated) g_updated
+  let c_updated = Context.from_global g_updated in
+  let gc_with_next = Gcontext.add gc (Context.from_global g) (Global.bot, Nexts.from_list [((s, m, args), c_updated)]) in
+  Gcontext.add gc_with_next c_updated (g_updated, Nexts.bot)
 
-let transfer_of_context app c g gc =
+let transfer_of_context app c gn gc =
+  let (g, _) = gn in
   List.fold_left (transfer_of_call app g) gc (next g)
 
 let transfer app gc =
