@@ -27,6 +27,8 @@ let get o k =
 
 let filter = ObjectMap.filter
 
+let fold = ObjectMap.fold
+
 let from_list = ObjectMap.from_list
 
 let to_string = ObjectMap.to_string Field.to_string Value.to_string

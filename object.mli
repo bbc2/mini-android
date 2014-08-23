@@ -25,6 +25,9 @@ val get : t -> Field.t -> Value.t
     predicate p. *)
 val filter : (Field.t -> Value.t -> bool) -> t -> t
 
+(** Fold on an object. *)
+val fold : (Field.t -> Value.t -> 'a -> 'a) -> t -> 'a -> 'a
+
 (** Build an object from an association list. *)
 val from_list : (Field.t * Value.t) list -> t
 
