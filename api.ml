@@ -8,8 +8,8 @@ let transfer_exn m v args l =
   let ((h, _), e) = l in
   match m with
   | "startActivity" ->
-    (* Assumption: only one such call per callback. Otherwise, the analysis is
-       potentially incorrect. *)
+    (* Assumption: at most one such call per callback. Otherwise, the analysis
+       is potentially incorrect. *)
     let arg = match args with
       | [a] -> a
       | _ -> raise (Wrong_args (List.length args)) in
@@ -17,7 +17,7 @@ let transfer_exn m v args l =
     let pstack = match Env.get e arg with
       | Value.String s -> [s]
       | _ -> [] in
-    let pending = Value.Pending (Pending.from_stack pstack) in
+    let pending = Value.Pending (Pending.from_list pstack) in
     let update s h = Heap.add_field h s Field.Pending pending in
     let h_update = Sites.fold update ss Heap.bot in
     ((h_update, As.bot), Env.bot)

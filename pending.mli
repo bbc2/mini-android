@@ -3,23 +3,26 @@
 (** Type of an abstract pending stack. *)
 type t
 
-(** Empty stack set. *)
+(** Empty pending stack. *)
 val bot : t
 
-(** Total ordering on stack sets. *)
+(** Total ordering on pending stacks. *)
 val compare : t -> t -> int
 
-(** Test whether two stack sets are equal. *)
+(** Test whether two pending stacks are equal. *)
 val equal : t -> t -> bool
 
-(** Join of two stack sets. *)
+(** Join of two pending stacks. *)
 val join : t -> t -> t
 
-(** Build a stack set from a stack. *)
-val from_stack : string list -> t
-
 (** Push an activity on a pending stack. *)
-val push : t -> string -> t
+val add : t -> string -> t
 
-(** String representation of a stack set. *)
+(** Fold on a pending stack. *)
+val fold : (string -> 'a -> 'a) -> t -> 'a -> 'a
+
+(** Build a pending stack from a list of class names. *)
+val from_list : string list -> t
+
+(** String representation of a pending stack. *)
 val to_string : t -> string

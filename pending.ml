@@ -1,47 +1,20 @@
-module PStack = struct type t = string list let compare = compare end
-module PSet = Lib.Set.Make(PStack)
+module PSet = Lib.Set.Make(String)
 
-type t =
-  | PSet of PSet.t
-  | Any
+type t = PSet.t
 
-let max_stack_size = 2
+let compare = PSet.compare
 
-let compare p1 p2 =
-  match (p1, p2) with
-  | (PSet ps1, PSet ps2) -> PSet.compare ps1 ps2
-  | (Any, _) | (_, Any) -> compare p1 p2
+let equal = PSet.equal
 
-let equal p1 p2 =
-  compare p1 p2 = 0
+let bot = PSet.empty
 
-let bot = PSet PSet.empty
+let join = PSet.union
 
-let join p1 p2 =
-  match (p1, p2) with
-  | (PSet ps1, PSet ps2) ->
-    PSet (PSet.union ps1 ps2)
-  | _ -> Any
+let add p c =
+  PSet.add c p
 
-let from_stack l =
-  if List.length l > max_stack_size then
-    Any
-  else
-    PSet (PSet.singleton l)
+let fold = PSet.fold
 
-let push p c =
-  match p with
-  | Any -> Any
-  | PSet pset ->
-    let push_stack pstack p = join p (from_stack (c::pstack)) in
-    PSet.fold push_stack pset (PSet PSet.empty)
+let from_list = PSet.from_list
 
-let string_of_pstack pstack =
-  let append_string s c =
-    s ^ (if s = "" then "" else "; ") ^ c in
-  "[" ^ (List.fold_left append_string "" pstack) ^ "]"
-
-let to_string p =
-  match p with
-  | Any -> "Any"
-  | PSet pset -> PSet.to_string string_of_pstack pset
+let to_string = PSet.to_string (fun s -> s)
