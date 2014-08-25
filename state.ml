@@ -21,6 +21,8 @@ let join = StateSet.union
 
 let fold = StateSet.fold
 
+let filter = StateSet.filter
+
 let from_list = StateSet.from_list
 
 let string_of_state s =

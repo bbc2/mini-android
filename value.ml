@@ -3,6 +3,7 @@ type t =
   | String of string
   | Sites of Sites.t
   | Pending of Pending.t
+  | Finished of Finished.t
   | State of State.t
   | Any
 
@@ -28,15 +29,25 @@ let join v1 v2 =
   | (State s1, State s2) -> State (State.join s1 s2)
   | _ -> Any
 
-let get_state v =
-  match v with
-  | State s -> s
-  | _ -> State.bot
-
 let get_sites v =
   match v with
   | Sites ss -> ss
   | _ -> Sites.bot
+
+let get_finished v =
+  match v with
+  | Finished f -> f
+  | _ -> Finished.bot
+
+let get_pending v =
+  match v with
+  | Pending p -> p
+  | _ -> Pending.bot
+
+let get_state v =
+  match v with
+  | State s -> s
+  | _ -> State.bot
 
 let to_string v =
   match v with
@@ -44,5 +55,6 @@ let to_string v =
   | String s -> "\"" ^ s ^ "\""
   | Sites ss -> Sites.to_string ss
   | Pending p -> Pending.to_string p
+  | Finished f -> Finished.to_string f
   | State s -> State.to_string s
   | Any -> "Any"

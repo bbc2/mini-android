@@ -6,22 +6,38 @@ let lifecycle_update s state g =
   (h', a)
 
 let lifecycle_calls s st calls =
-  match st with
-  | State.Uninit -> ((s, "<init>", []), lifecycle_update s State.Init) :: calls
-  | State.Init -> ((s, "onCreate", []), lifecycle_update s State.Created) :: calls
-  | State.Created -> ((s, "onStart", []), lifecycle_update s State.Visible)
-                     :: ((s, "onStop", []), lifecycle_update s State.Stopped) :: calls
-  | State.Visible -> ((s, "onResume", []), lifecycle_update s State.Active) :: calls
-  | State.Active -> ((s, "onPause", []), lifecycle_update s State.Visible) :: calls
-  | State.Stopped -> ((s, "onRestart", []), lifecycle_update s State.Created)
-                     :: ((s, "onDestroy", []), lifecycle_update s State.Destroyed) :: calls
-  | State.Destroyed -> calls
+  let nexts = match st with
+    | State.Uninit -> [((s, "<init>", []), lifecycle_update s State.Init)]
+    | State.Init -> [((s, "onCreate", []), lifecycle_update s State.Created)]
+    | State.Created -> [((s, "onStart", []), lifecycle_update s State.Visible);
+                        ((s, "onStop", []), lifecycle_update s State.Stopped)]
+    | State.Visible -> [((s, "onResume", []), lifecycle_update s State.Active)]
+    | State.Active -> [((s, "onPause", []), lifecycle_update s State.Visible)]
+    | State.Stopped -> [((s, "onRestart", []), lifecycle_update s State.Created);
+                        ((s, "onDestroy", []), lifecycle_update s State.Destroyed)]
+    | State.Destroyed -> [] in
+  nexts @ calls
+
+let filter_pending p calls =
+  if Pending.equal p Pending.bot then
+    calls
+  else
+    List.filter (fun ((_, m, _), _) -> List.mem m ["onPause"; "onStop"]) calls
+
+let filter_finished f calls =
+  if Finished.le f Finished.True then
+    List.filter (fun ((_, m, _), _) -> List.mem m ["onPause"; "onStop"; "onDestroy"]) calls
+  else
+    calls
 
 let lifecycle g s =
   let (h, _) = g in
-  let value = Heap.get_field h s Field.State in
-  let state = Value.get_state value in
-  State.fold (lifecycle_calls s) state []
+  let state = Value.get_state (Heap.get_field h s Field.State) in
+  let pending = Value.get_pending (Heap.get_field h s Field.Pending) in
+  let finished = Value.get_finished (Heap.get_field h s Field.Finished) in
+  filter_finished finished
+    (filter_pending pending
+       (State.fold (lifecycle_calls s) state []))
 
 let next g =
   let (_, a) = g in

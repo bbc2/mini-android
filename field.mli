@@ -3,8 +3,9 @@
 (** Type of a field. *)
 type t =
   | J of string (** Mini Java field *)
-  | Pending (** Android pending field *)
-  | State (** Android state field *)
+  | Pending (** Android [pending] field *)
+  | Finished (** Android [finished] field *)
+  | State (** Android [state] field *)
 
 (** Total ordering between field. *)
 val compare : t -> t -> int
