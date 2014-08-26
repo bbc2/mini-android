@@ -56,9 +56,9 @@ let edges_of_gcontext gc =
   let append c gn (l, im) =
     let (_, n) = gn in
     let (im', id_src) = make_id im c in
-    let append (call, c) (l, im) =
+    let append (action, c) (l, im) =
       let (im', id_dst) = make_id im c in
-      let s = Printf.sprintf "%d -> %d [label=%S]" id_src id_dst (Call.to_string call) in
+      let s = Printf.sprintf "%d -> %d [label=%S]" id_src id_dst (Action.to_string action) in
       ((s :: l), im') in
     Nexts.fold append n (l, im') in
   Gcontext.fold append gc ([], im_init)

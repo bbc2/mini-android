@@ -44,7 +44,7 @@ let next_lifecycle g =
     (* Gather potential lifecycle calls for each activity in the stack *)
     let add_cs cs s =
       cs @ (lifecycle g s) in
-    List.fold_left add_cs [] al
+    List.map (fun (c, a) -> Action.Call (c, a)) (List.fold_left add_cs [] al)
   | As.None -> []
 
 let finish s g =
@@ -57,28 +57,33 @@ let next_back g =
   match a with
   | As.Any -> failwith "Android.next_back: Activity stack lost"
   | As.AS (s :: _) ->
-      let state = Value.get_state (Heap.get_field h s Field.State) in
-      if State.le (State.from_list [State.Active]) state then
-        [((s, "~back", []), finish s)]
-      else
-        []
+    let state = Value.get_state (Heap.get_field h s Field.State) in
+    if State.le (State.from_list [State.Active]) state then
+      [Action.Back s]
+    else
+      []
   | As.AS [] | As.None -> []
 
-let transfer_of_call app g gc transition =
+let transfer_of_call app g gc action =
   (* Call args and return value are not taken into account. *)
-  let ((s, m, args), update) = transition in
-  let e_init = Env.from_list [("this", Value.Sites (Sites.from_list [s]))] in
-  let l_init = (g, e_init) in
-  let cfg = App.get_method app (Site.get_class s) m in
-  let (g_final, _) = Analysis.fixpoint Local.equal (Sem.transfer Api.transfer_exn cfg) l_init in
-  let g_updated = update g_final in
-  let c_updated = Context.from_global g_updated in
-  let gc_with_next = Gcontext.add gc (Context.from_global g) (Global.bot, Nexts.from_list [((s, m, args), c_updated)]) in
-  Gcontext.add gc_with_next c_updated (g_updated, Nexts.bot)
+  let g' = match action with
+    | Action.Call ((s, m, args), update) ->
+      let e_init = Env.from_list [("this", Value.Sites (Sites.from_list [s]))] in
+      let l_init = (g, e_init) in
+      let cfg = App.get_method app (Site.get_class s) m in
+      let (g_final, _) = Analysis.fixpoint Local.equal (Sem.transfer Api.transfer_exn cfg) l_init in
+      update g_final
+    | Action.Back s -> finish s g in
+  let c' = Context.from_global g' in
+  let gc_with_next = Gcontext.add gc (Context.from_global g) (Global.bot, Nexts.from_list [(action, c')]) in
+  Gcontext.add gc_with_next c' (g', Nexts.bot)
+
+let next g =
+  (next_lifecycle g) @ (next_back g)
 
 let transfer_of_context app c gn gc =
   let (g, _) = gn in
-  List.fold_left (transfer_of_call app g) gc ((next_lifecycle g) @ (next_back g))
+  List.fold_left (transfer_of_call app g) gc (next g)
 
 let transfer app gc =
   Gcontext.fold (transfer_of_context app) gc gc
