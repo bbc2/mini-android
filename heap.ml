@@ -20,6 +20,9 @@ let join h1 h2 =
 let add_field h s f v =
   join h (HeapMap.singleton s (Object.from_list [(f, v)]))
 
+let add h s o =
+  join h (HeapMap.singleton s o)
+
 let set h s o =
   HeapMap.add s o h
 

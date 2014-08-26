@@ -4,6 +4,7 @@
 type t =
   | Call of Call.t * (Global.t -> Global.t)
   | Back of Site.t
+  | New of string
 
 (** Total ordering on actions. *)
 val compare : t -> t -> int

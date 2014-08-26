@@ -25,6 +25,9 @@ val set_field : t -> Site.t -> Field.t -> Value.t -> t
 (** Get the value associated with a site and a field in a heap. *)
 val get_field : t -> Site.t -> Field.t -> Value.t
 
+(** Join the value associated with a site to update a heap. *)
+val add : t -> Site.t -> Object.t -> t
+
 (** Set the object associated with a site in a heap. *)
 val set : t -> Site.t -> Object.t -> t
 

@@ -18,6 +18,9 @@ val bot : t
 (** Join of two activity stacks. *)
 val join : t -> t -> t
 
+(** Push an activity on a stack. *)
+val push : t -> Site.t -> t
+
 (** Build an activity stack from a list. *)
 val from_list : Site.t list -> t
 

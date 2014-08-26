@@ -8,8 +8,8 @@ let transfer_exn m v args l =
   let ((h, _), e) = l in
   match m with
   | "startActivity" ->
-    (* Assumption: at most one such call per callback. Otherwise, the analysis
-       is potentially incorrect. *)
+    (* Assumption: each such call is executed at most once. Otherwise, the
+       analysis is potentially incorrect. *)
     let arg = match args with
       | [a] -> a
       | _ -> raise (Wrong_args (List.length args)) in

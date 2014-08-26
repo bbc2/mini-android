@@ -64,22 +64,51 @@ let next_back g =
       []
   | As.AS [] | As.None -> []
 
+let next_new g =
+  let (h, a) = g in
+  match a with
+  | As.Any -> failwith "Android.next_new: Activity stack lost"
+  | As.AS (s :: _) ->
+    let state = Value.get_state (Heap.get_field h s Field.State) in
+    let pending = Value.get_pending (Heap.get_field h s Field.Pending) in
+    if State.le (State.from_list [State.Stopped]) state
+    || State.le (State.from_list [State.Visible]) state then
+      let add_cs cl cs =
+        (Action.New cl) :: cs in
+      Pending.fold add_cs pending []
+    else
+      []
+  | As.AS [] | As.None -> []
+
+let new_activity cl g =
+  let (h, a) = g in
+  let s = Site.make cl 0 in
+  let o = Object.from_list [
+      (Field.State, Value.State (State.from_list [State.Uninit]));
+      (Field.Pending, Value.Pending (Pending.from_list []));
+      (Field.Finished, Value.Finished (Finished.False))
+    ] in
+  let h_new = Heap.add h s o in
+  let a_new = As.push a s in
+  (h_new, a_new)
+
 let transfer_of_call app g gc action =
-  (* Call args and return value are not taken into account. *)
   let g' = match action with
     | Action.Call ((s, m, args), update) ->
+      (* Call args and return value are not taken into account. *)
       let e_init = Env.from_list [("this", Value.Sites (Sites.from_list [s]))] in
       let l_init = (g, e_init) in
       let cfg = App.get_method app (Site.get_class s) m in
       let (g_final, _) = Analysis.fixpoint Local.equal (Sem.transfer Api.transfer_exn cfg) l_init in
       update g_final
-    | Action.Back s -> finish s g in
+    | Action.Back s -> finish s g
+    | Action.New cl -> new_activity cl g in
   let c' = Context.from_global g' in
   let gc_with_next = Gcontext.add gc (Context.from_global g) (Global.bot, Nexts.from_list [(action, c')]) in
   Gcontext.add gc_with_next c' (g', Nexts.bot)
 
 let next g =
-  (next_lifecycle g) @ (next_back g)
+  (next_lifecycle g) @ (next_back g) @ (next_new g)
 
 let transfer_of_context app c gn gc =
   let (g, _) = gn in

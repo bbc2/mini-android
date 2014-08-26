@@ -20,6 +20,12 @@ let join a1 a2 =
       Any
   | (Any, _) | (_, Any) -> Any
 
+let push a s =
+  match a with
+  | Any -> Any
+  | AS al -> AS (s :: al)
+  | None -> AS [s]
+
 let from_list l =
   AS l
 
