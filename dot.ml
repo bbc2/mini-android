@@ -37,7 +37,7 @@ let record_of_as a =
     | As.Any | As.None -> As.to_string a
     | As.AS al ->
       let append s site =
-        Printf.sprintf "%s%s%s" (Site.to_string site) (if s = "" then "" else " :: ") s in
+        Printf.sprintf "%s%s%s" s (if s = "" then "" else " :: ") (Site.to_string site) in
       List.fold_left append "" al in
   Printf.sprintf "stack = %s" str
 
