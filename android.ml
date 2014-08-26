@@ -95,12 +95,13 @@ let new_activity cl g =
 let transfer_of_call app g gc action =
   let g' = match action with
     | Action.Call ((s, m, args), update) ->
-      (* Call args and return value are not taken into account. *)
-      let e_init = Env.from_list [("this", Value.Sites (Sites.from_list [s]))] in
-      let l_init = (g, e_init) in
-      let cfg = App.get_method app (Site.get_class s) m in
-      let (g_final, _) = Analysis.fixpoint Local.equal (Sem.transfer Api.transfer_exn cfg) l_init in
-      update g_final
+      (* Return value is not taken into account. *)
+      let (params, cfg) = App.get_method app (Site.get_class s) m in
+      let e = Env.from_list (("this", Value.Sites (Sites.from_list [s]))
+                             :: (List.combine params args)) in
+      let l = (g, e) in
+      let (g', _) = Analysis.fixpoint Local.equal (Sem.transfer Api.transfer_exn cfg) l in
+      update g'
     | Action.Back s -> finish s g
     | Action.New cl -> new_activity cl g in
   let c' = Context.from_global g' in

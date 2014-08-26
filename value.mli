@@ -7,6 +7,7 @@ type t =
   | Sites of Sites.t (** Potential sites *)
   | Pending of Pending.t (** Potential pending stacks *)
   | Finished of Finished.t (** Potential finished field *)
+  | Listeners of Sites.t (** Potential listeners field *)
   | State of State.t (** Potential states *)
   | Any (** Anything *)
 

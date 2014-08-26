@@ -12,6 +12,9 @@ type classes
 (** Methods of a class. *)
 type methods
 
+(** Formal parameters of a method. *)
+type params = string list
+
 (** Fold on initial global states. *)
 val fold_on_init_states : (Global.t -> 'a -> 'a) -> t -> 'a -> 'a
 
@@ -19,7 +22,7 @@ val fold_on_init_states : (Global.t -> 'a -> 'a) -> t -> 'a -> 'a
 val manifest_from_string : string -> manifest
 
 (** Build a class from a list of methods. *)
-val methods_from_list : (string * Cfg.t) list -> methods
+val methods_from_list : (string * (params * Cfg.t)) list -> methods
 
 (** Build a set of classes for an app from a list of classes. *)
 val classes_from_list : (string * methods) list -> classes
@@ -32,4 +35,4 @@ val from_ast : Lang.Ast.app -> t
 
 (** Get CFG associated with a class and a method in an application. Return an
     empty CFG if it cannot be found. *)
-val get_method : t -> string -> string -> Cfg.t
+val get_method : t -> string -> string -> (params * Cfg.t)

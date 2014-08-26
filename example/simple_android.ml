@@ -12,6 +12,6 @@ let () =
       (2, Cfg.Set ("this", "f", "x"), 3);
     ] in
   let app = App.make (App.manifest_from_string "MainActivity")
-      (App.classes_from_list [("MainActivity", App.methods_from_list [("<init>", ma_init_cfg)])]) in
+      (App.classes_from_list [("MainActivity", App.methods_from_list [("<init>", ([], ma_init_cfg))])]) in
   print_endline (Gcontext.to_string gc);
   print_endline (Gcontext.to_string (Analysis.fixpoint Gcontext.equal (Android.transfer app) gc))

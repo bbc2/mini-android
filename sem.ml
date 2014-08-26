@@ -20,9 +20,7 @@ let transfer_of_inst api_exn i l : Local.t =
   | Cfg.Call (v, m, args) ->
     try
       api_exn m v args l
-    with
-    | Api.Wrong_args n -> failwith (Printf.sprintf "Wrong number of args for %s: %d instead of %d" m n (List.length args))
-    | Api.Method_not_found -> l
+    with Api.Method_not_found -> l
 
 let transfer api_exn cfg l =
   let step e l =

@@ -8,6 +8,10 @@ type field_name = string
 
 type var_name = string
 
+type param_name = string
+
+type params = var_name list
+
 type args = var_name list
 
 type label = int
@@ -19,7 +23,7 @@ type inst =
   | Get of var_name * var_name * field_name
   | Call of var_name * method_name * args
 
-type method_ = method_name * inst list
+type method_ = method_name * params * inst list
 
 type class_ = class_name * method_ list
 

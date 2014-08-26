@@ -2,7 +2,9 @@ type manifest = string
 
 module MethMap = Lib.Map.Make(String)
 
-type methods = Cfg.t MethMap.t
+type params = string list
+
+type methods = (params * Cfg.t) MethMap.t
 
 module ClassMap = Lib.Map.Make(String)
 
@@ -30,7 +32,7 @@ let fold_on_init_states f app =
 let manifest_from_string s =
   s
 
-let rec methods_from_list = MethMap.from_list
+let methods_from_list = MethMap.from_list
 
 let classes_from_list = ClassMap.from_list
 
@@ -43,9 +45,9 @@ let make m c =
 let rec methods_from_class cl =
   match cl with
   | [] -> MethMap.empty
-  | (name, m)::tl ->
+  | (name, p, m)::tl ->
     let cfg = Cfg.from_ast_insts m in
-    MethMap.add name cfg (methods_from_class tl)
+    MethMap.add name (p, cfg) (methods_from_class tl)
 
 let rec classes_from_prog prog =
   match prog with
@@ -63,4 +65,4 @@ let get_method app c m =
   let methmap = try ClassMap.find c classmap
     with Not_found -> failwith (Printf.sprintf "App.get_method: Class %s not found" c) in
   try MethMap.find m methmap
-  with Not_found -> Cfg.make 0 0 []
+  with Not_found -> ([], Cfg.make 0 0 [])

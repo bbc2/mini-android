@@ -4,6 +4,7 @@ type t =
   | Sites of Sites.t
   | Pending of Pending.t
   | Finished of Finished.t
+  | Listeners of Sites.t
   | State of State.t
   | Any
 
@@ -27,10 +28,11 @@ let join v1 v2 =
   | (String s1, String s2) -> if s1 = s2 then String s1 else Any
   | (Pending p1, Pending p2) -> Pending (Pending.join p1 p2)
   | (State s1, State s2) -> State (State.join s1 s2)
+  | (Listeners ss1, Listeners ss2) -> Listeners (Sites.join ss1 ss2)
   | (Finished f1, Finished f2) -> Finished (Finished.join f1 f2)
   | (Sites _, _) | (String _, _) | (Pending _, _)
-  | (State _, _) | (Finished _, _)
-  | (Any, _) | (_, Any) -> Any
+  | (State _, _) | (Finished _, _) | (Listeners _, _)
+  | (Any, _) -> Any
 
 let get_sites v =
   match v with
@@ -59,5 +61,6 @@ let to_string v =
   | Sites ss -> Sites.to_string ss
   | Pending p -> Pending.to_string p
   | Finished f -> Finished.to_string f
+  | Listeners ss -> Sites.to_string ss
   | State s -> State.to_string s
   | Any -> "Any"

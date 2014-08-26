@@ -1,7 +1,7 @@
 (** Call instances *)
 
 (** Type of a call. *)
-type t = Site.t * string * Sites.t list
+type t = Site.t * string * Value.t list
 
 (** Total ordering on calls. *)
 val compare : t -> t -> int

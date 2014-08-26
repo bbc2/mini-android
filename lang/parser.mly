@@ -20,8 +20,8 @@ class_:
 | Class c = Id LeftCurly ml = method_* RightCurly { (c, ml) }
 
 method_:
-| Method m = Id LeftPar RightPar (* no arguments, no return value *)
-  LeftCurly il = separated_list(Semi, inst) RightCurly { (m, il) }
+| Method m = Id LeftPar params = separated_list(Comma, Id) RightPar
+  LeftCurly il = separated_list(Semi, inst) RightCurly { (m, params, il) }
 
 inst:
 | v = Id Eq s = Str { Ast.Assign (v, s) }
