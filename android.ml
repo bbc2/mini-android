@@ -9,9 +9,9 @@ let lifecycle_calls s st calls =
   let nexts = match st with
     | State.Uninit -> [((s, "<init>", []), lifecycle_update s State.Init)]
     | State.Init -> [((s, "onCreate", []), lifecycle_update s State.Created)]
-    | State.Created -> [((s, "onStart", []), lifecycle_update s State.Visible);
+    | State.Created -> [((s, "onStart", []), lifecycle_update s State.Visible)]
+    | State.Visible -> [((s, "onResume", []), lifecycle_update s State.Active);
                         ((s, "onStop", []), lifecycle_update s State.Stopped)]
-    | State.Visible -> [((s, "onResume", []), lifecycle_update s State.Active)]
     | State.Active -> [((s, "onPause", []), lifecycle_update s State.Visible)]
     | State.Stopped -> [((s, "onRestart", []), lifecycle_update s State.Created);
                         ((s, "onDestroy", []), lifecycle_update s State.Destroyed)]
