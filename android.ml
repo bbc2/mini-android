@@ -19,10 +19,7 @@ let lifecycle_calls s st calls =
   nexts @ calls
 
 let filter_pending p calls =
-  if Pending.equal p Pending.bot then
-    calls
-  else
-    List.filter (fun ((_, m, _), _) -> List.mem m ["onPause"; "onStop"]) calls
+  calls
 
 let filter_finished f calls =
   if Finished.le f Finished.True then
@@ -39,16 +36,33 @@ let lifecycle g s =
     (filter_pending pending
        (State.fold (lifecycle_calls s) state []))
 
-let next g =
+let next_lifecycle g =
   let (_, a) = g in
   match a with
-  | As.Any -> failwith "Android.next: Activity stack lost"
+  | As.Any -> failwith "Android.next_lifecycle: Activity stack lost"
   | As.AS al ->
-    (* Gather potential calls for each activity in the stack *)
+    (* Gather potential lifecycle calls for each activity in the stack *)
     let add_cs cs s =
       cs @ (lifecycle g s) in
     List.fold_left add_cs [] al
   | As.None -> []
+
+let finish s g =
+  let (h, a) = g in
+  let h' = Heap.set_field h s Field.Finished (Value.Finished Finished.True) in
+  (h', a)
+
+let next_back g =
+  let (h, a) = g in
+  match a with
+  | As.Any -> failwith "Android.next_back: Activity stack lost"
+  | As.AS (s :: _) ->
+      let state = Value.get_state (Heap.get_field h s Field.State) in
+      if State.le (State.from_list [State.Active]) state then
+        [((s, "~back", []), finish s)]
+      else
+        []
+  | As.AS [] | As.None -> []
 
 let transfer_of_call app g gc transition =
   (* Call args and return value are not taken into account. *)
@@ -64,7 +78,7 @@ let transfer_of_call app g gc transition =
 
 let transfer_of_context app c gn gc =
   let (g, _) = gn in
-  List.fold_left (transfer_of_call app g) gc (next g)
+  List.fold_left (transfer_of_call app g) gc ((next_lifecycle g) @ (next_back g))
 
 let transfer app gc =
   Gcontext.fold (transfer_of_context app) gc gc

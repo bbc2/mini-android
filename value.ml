@@ -27,7 +27,10 @@ let join v1 v2 =
   | (String s1, String s2) -> if s1 = s2 then String s1 else Any
   | (Pending p1, Pending p2) -> Pending (Pending.join p1 p2)
   | (State s1, State s2) -> State (State.join s1 s2)
-  | _ -> Any
+  | (Finished f1, Finished f2) -> Finished (Finished.join f1 f2)
+  | (Sites _, _) | (String _, _) | (Pending _, _)
+  | (State _, _) | (Finished _, _)
+  | (Any, _) | (_, Any) -> Any
 
 let get_sites v =
   match v with

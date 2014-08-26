@@ -19,6 +19,9 @@ val compare : t -> t -> int
 (** Test whether two abstract states are equal. *)
 val equal : t -> t -> bool
 
+(** Partial order on abstract states. *)
+val le : t -> t -> bool
+
 (** Bottom. *)
 val bot : t
 

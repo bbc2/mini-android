@@ -15,6 +15,8 @@ let compare = StateSet.compare
 
 let equal = StateSet.equal
 
+let le = StateSet.subset
+
 let bot = StateSet.empty
 
 let join = StateSet.union
