@@ -3,21 +3,18 @@ manifest {
 }
 
 class MainActivity {
-    method <init>() {
-        s = "I am initialized";
-        this.state = s
-    }
-
     method onCreate() {
-        i = "OtherActivity";
-        this.startActivity(i)
+        str = "OtherActivity";
+        this.other = str;
+        b = new Button;
+        this.addListener(b)
     }
+}
 
-    method onResume() {
-        a = new A;
-        b = new B;
-        a.f = b;
-        c = a.f
+class Button {
+    method onClick(a) {
+        i = a.other;
+        a.startActivity(i)
     }
 }
 

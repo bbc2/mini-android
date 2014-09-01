@@ -49,6 +49,11 @@ let get_pending v =
   | Pending p -> p
   | _ -> Pending.bot
 
+let get_listeners v =
+  match v with
+  | Listeners ss -> ss
+  | _ -> Sites.bot
+
 let get_state v =
   match v with
   | State s -> s

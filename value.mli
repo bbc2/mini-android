@@ -29,6 +29,9 @@ val get_sites : t -> Sites.t
 (** Get the abstract [pending] field a value can represent. *)
 val get_pending : t -> Pending.t
 
+(** Get the abstract [listeners] field a value can represent. *)
+val get_listeners : t -> Sites.t
+
 (** Get the abstract [finished] field a value can represent. *)
 val get_finished : t -> Finished.t
 

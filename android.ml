@@ -92,6 +92,22 @@ let new_activity cl g =
   let a_new = As.push a s in
   (h_new, a_new)
 
+let next_click g =
+  let (h, a) = g in
+  match a with
+  | As.Any -> failwith "Android.next_click: Activity stack lost"
+  | As.AS (s :: _) ->
+      let state = Value.get_state (Heap.get_field h s Field.State) in
+      if State.le (State.from_list [State.Active]) state then
+        let listeners = Value.get_listeners (Heap.get_field h s Field.Listeners) in
+        let arg = Value.Sites (Sites.from_list [s]) in
+        let add_action listener actions =
+          (Action.Call ((listener, "onClick", [arg]), fun i -> i)) :: actions in
+        Sites.fold add_action listeners []
+      else
+        []
+  | As.AS [] | As.None -> []
+
 let transfer_of_call app g gc action =
   let g' = match action with
     | Action.Call ((s, m, args), update) ->
@@ -109,7 +125,7 @@ let transfer_of_call app g gc action =
   Gcontext.add gc_with_next c' (g', Nexts.bot)
 
 let next g =
-  (next_lifecycle g) @ (next_back g) @ (next_new g)
+  (next_lifecycle g) @ (next_back g) @ (next_new g) @ (next_click g)
 
 let transfer_of_context app c gn gc =
   let (g, _) = gn in
