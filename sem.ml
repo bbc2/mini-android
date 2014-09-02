@@ -2,7 +2,7 @@ let transfer_of_inst api_exn i l : Local.t =
   let ((h, a), e) = l in
   match i with
   | Cfg.Assign (v, s) ->
-    let e_new = Env.from_list [(v, Value.String s)] in
+    let e_new = Env.from_list [(v, Value.String (Str.from_list [s]))] in
     ((Heap.bot, As.bot), e_new)
   | Cfg.New (v, cl, id) ->
     let e_new = Env.from_list [(v, (Value.Sites (Sites.from_list [Site.make cl id])))] in

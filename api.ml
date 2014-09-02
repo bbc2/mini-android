@@ -12,10 +12,10 @@ let transfer_exn m v args l =
       | [a] -> a
       | _ -> failwith "Api.transfer_exn: Wrong number of arguments for startActivity" in
     let ss = Value.get_sites (Env.get e v) in
-    let pstack = match Env.get e arg with
-      | Value.String s -> [s]
-      | _ -> [] in
-    let pending = Value.Pending (Pending.from_list pstack) in
+    let s = Value.get_str (Env.get e arg) in
+    let add_str s p =
+      Pending.add p s in
+    let pending = Value.Pending (Str.fold add_str s Pending.bot) in
     let update s h = Heap.add_field h s Field.Pending pending in
     let h_update = Sites.fold update ss Heap.bot in
     ((h_update, As.bot), Env.bot)

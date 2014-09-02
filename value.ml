@@ -1,6 +1,6 @@
 type t =
   | None
-  | String of string
+  | String of Str.t
   | Sites of Sites.t
   | Pending of Pending.t
   | Finished of Bool.t
@@ -10,9 +10,10 @@ type t =
 let compare v1 v2 =
   match (v1, v2) with
   | (Sites ss1, Sites ss2) -> Sites.compare ss1 ss2
+  | (String s1, String s2) -> Str.compare s1 s2
   | (Pending p1, Pending p2) -> Pending.compare p1 p2
   | (State s1, State s2) -> State.compare s1 s2
-  | _ -> compare v1 v2
+  | _ -> Pervasives.compare v1 v2
 
 let equal v1 v2 =
   compare v1 v2 = 0
@@ -24,13 +25,18 @@ let join v1 v2 =
   | (_, None) -> v1
   | (None, _) -> v2
   | (Sites ss1, Sites ss2) -> Sites (Sites.join ss1 ss2)
-  | (String s1, String s2) -> if s1 = s2 then String s1 else Any
+  | (String s1, String s2) -> String (Str.join s1 s2)
   | (Pending p1, Pending p2) -> Pending (Pending.join p1 p2)
   | (State s1, State s2) -> State (State.join s1 s2)
   | (Finished f1, Finished f2) -> Finished (Bool.join f1 f2)
   | (Sites _, _) | (String _, _) | (Pending _, _)
   | (State _, _) | (Finished _, _)
   | (Any, _) -> Any
+
+let get_str s =
+  match s with
+  | String s -> s
+  | _ -> Str.bot
 
 let get_sites v =
   match v with
@@ -55,7 +61,7 @@ let get_state v =
 let to_string v =
   match v with
   | None -> "None"
-  | String s -> "\"" ^ s ^ "\""
+  | String s -> Str.to_string s
   | Sites ss -> Sites.to_string ss
   | Pending p -> Pending.to_string p
   | Finished f -> Bool.to_string f

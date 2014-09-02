@@ -3,7 +3,7 @@
 (** Type of an abstract value. *)
 type t =
   | None (** No value defined *)
-  | String of string (** Maybe a string *)
+  | String of Str.t (** Potential string *)
   | Sites of Sites.t (** Potential sites *)
   | Pending of Pending.t (** Potential pending stacks *)
   | Finished of Bool.t (** Potential finished field *)
@@ -21,6 +21,9 @@ val bot : t
 
 (** Join of two values. *)
 val join : t -> t -> t
+
+(** Get the string a value can represent. *)
+val get_str : t -> Str.t
 
 (** Get the set of sites a value can represent. *)
 val get_sites : t -> Sites.t
