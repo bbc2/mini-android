@@ -6,7 +6,7 @@ type t =
   | String of string (** Maybe a string *)
   | Sites of Sites.t (** Potential sites *)
   | Pending of Pending.t (** Potential pending stacks *)
-  | Finished of Finished.t (** Potential finished field *)
+  | Finished of Bool.t (** Potential finished field *)
   | State of State.t (** Potential states *)
   | Any (** Anything *)
 
@@ -29,7 +29,7 @@ val get_sites : t -> Sites.t
 val get_pending : t -> Pending.t
 
 (** Get the abstract [finished] field a value can represent. *)
-val get_finished : t -> Finished.t
+val get_finished : t -> Bool.t
 
 (** Get the abstract state a value can represent. *)
 val get_state : t -> State.t

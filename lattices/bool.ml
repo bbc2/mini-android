@@ -1,10 +1,10 @@
 type t =
-  | None
+  | Bot
   | True
   | False
-  | Any
+  | Top
 
-let bot = None
+let bot = Bot
 
 let compare = compare
 
@@ -13,16 +13,16 @@ let equal f1 f2 =
 
 let join f1 f2 =
   match (f1, f2) with
-  | (None, v) | (v, None) -> v
+  | (Bot, v) | (v, Bot) -> v
   | (True, True) | (False, False) -> f1
-  | (True, False) | (False, True) | (Any, _) | (_, Any) -> Any
+  | (True, False) | (False, True) | (Top, _) | (_, Top) -> Top
 
 let le f1 f2 =
   equal (join f1 f2) f2
 
 let to_string f =
   match f with
-  | None -> "None"
+  | Bot -> "Bot"
   | True -> "True"
   | False -> "False"
-  | Any -> "Any"
+  | Top -> "Top"

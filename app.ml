@@ -21,7 +21,7 @@ let get_init_states app =
       (s_m, Object.from_list [
           (Field.State, Value.State (State.from_list [State.Uninit]));
           (Field.Pending, Value.Pending (Pending.from_list []));
-          (Field.Finished, Value.Finished (Finished.False))
+          (Field.Finished, Value.Finished (Bool.False))
         ])] in
   let g0 = (h0, As.from_list [s_m]) in
   InitSet.singleton g0

@@ -1,3 +1,4 @@
 true: use_menhir
 <lang>: include
 <lang/*>: for-pack(Lang)
+<lattices>: include

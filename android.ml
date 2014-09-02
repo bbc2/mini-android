@@ -22,7 +22,7 @@ let filter_pending p calls =
   calls
 
 let filter_finished f calls =
-  if Finished.le f Finished.True then
+  if Bool.le f Bool.True then
     List.filter (fun ((_, m, _), _) -> List.mem m ["onPause"; "onStop"; "onDestroy"]) calls
   else
     calls
@@ -49,7 +49,7 @@ let next_lifecycle g =
 
 let finish s g =
   let (h, a) = g in
-  let h' = Heap.set_field h s Field.Finished (Value.Finished Finished.True) in
+  let h' = Heap.set_field h s Field.Finished (Value.Finished Bool.True) in
   (h', a)
 
 let next_back g =
@@ -86,7 +86,7 @@ let new_activity cl g =
   let o = Object.from_list [
       (Field.State, Value.State (State.from_list [State.Uninit]));
       (Field.Pending, Value.Pending (Pending.from_list []));
-      (Field.Finished, Value.Finished (Finished.False))
+      (Field.Finished, Value.Finished (Bool.False))
     ] in
   let h_new = Heap.add h s o in
   let a_new = As.push a s in

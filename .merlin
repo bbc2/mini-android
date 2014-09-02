@@ -1,4 +1,7 @@
 S lang
+S lattices
 S example
 B _build
-B _build/parser
+B _build/lang
+B _build/lattices
+B _build/example
