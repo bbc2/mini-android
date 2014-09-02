@@ -7,7 +7,6 @@ type t =
   | Sites of Sites.t (** Potential sites *)
   | Pending of Pending.t (** Potential pending stacks *)
   | Finished of Finished.t (** Potential finished field *)
-  | Listeners of Sites.t (** Potential listeners field *)
   | State of State.t (** Potential states *)
   | Any (** Anything *)
 
@@ -28,9 +27,6 @@ val get_sites : t -> Sites.t
 
 (** Get the abstract [pending] field a value can represent. *)
 val get_pending : t -> Pending.t
-
-(** Get the abstract [listeners] field a value can represent. *)
-val get_listeners : t -> Sites.t
 
 (** Get the abstract [finished] field a value can represent. *)
 val get_finished : t -> Finished.t

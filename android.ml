@@ -99,7 +99,7 @@ let next_click g =
   | As.AS (s :: _) ->
       let state = Value.get_state (Heap.get_field h s Field.State) in
       if State.le (State.from_list [State.Active]) state then
-        let listeners = Value.get_listeners (Heap.get_field h s Field.Listeners) in
+        let listeners = Value.get_sites (Heap.get_field h s Field.Listeners) in
         let arg = Value.Sites (Sites.from_list [s]) in
         let add_action listener actions =
           (Action.Call ((listener, "onClick", [arg]), fun i -> i)) :: actions in

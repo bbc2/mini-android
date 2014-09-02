@@ -23,7 +23,7 @@ let record_of_value v =
   match v with
   | Value.Any | Value.None | Value.State _
   | Value.String _ | Value.Finished _ -> Value.to_string v
-  | Value.Sites ss | Value.Listeners ss -> record_of_sites ss
+  | Value.Sites ss -> record_of_sites ss
   | Value.Pending p -> record_of_pending p
 
 let record_of_object o =
