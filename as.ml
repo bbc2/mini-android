@@ -23,11 +23,14 @@ let join a1 a2 =
 let push a s =
   match a with
   | Any -> Any
-  | AS al -> AS (s :: al)
+  | AS al ->
+      if List.mem s al then
+        Any (* potentially infinite stack *)
+      else
+        AS (s :: al)
   | None -> AS [s]
 
-let from_list l =
-  AS l
+let from_list = List.fold_left push None
 
 let to_string a =
   match a with
