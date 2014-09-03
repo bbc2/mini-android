@@ -10,6 +10,8 @@ let bot = SSet.empty
 
 let join = SSet.union
 
+let le = SSet.subset
+
 let fold = SSet.fold
 
 let from_list = SSet.from_list

@@ -15,6 +15,7 @@ Global
 Gcontext
 Heap
 Lang
+Lattice
 Lib
 Local
 Next
