@@ -1,16 +1,5 @@
-type t =
-  | J of string
-  | Pending
-  | Finished
-  | Listeners
-  | State
+type t = string
 
-let compare = compare
+let compare = String.compare
 
-let to_string f =
-  match f with
-  | J s -> s
-  | Pending -> "~pending"
-  | Finished -> "~finished"
-  | Listeners -> "~listeners"
-  | State -> "~state"
+let to_string f = f

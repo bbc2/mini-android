@@ -2,7 +2,8 @@ type calls = (Site.t * string * Sites.t list * (Global.t -> Global.t)) list
 
 let lifecycle_update s state g =
   let (h, a) = g in
-  let h' = Heap.set_field h s Field.State (Value.State (State.from_list [state])) in
+  let (o, arec) = Heap.get h s in
+  let h' = Heap.set h s (o, Arecord.set_state arec (State.from_list [state])) in
   (h', a)
 
 let lifecycle_calls s st calls =
@@ -29,9 +30,10 @@ let filter_finished f calls =
 
 let lifecycle g s =
   let (h, _) = g in
-  let state = Value.get_state (Heap.get_field h s Field.State) in
-  let pending = Value.get_pending (Heap.get_field h s Field.Pending) in
-  let finished = Value.get_finished (Heap.get_field h s Field.Finished) in
+  let (_, arec) = Heap.get h s in
+  let state = Arecord.get_state arec in
+  let pending = Arecord.get_pending arec in
+  let finished = Arecord.get_finished arec in
   filter_finished finished
     (filter_pending pending
        (State.fold (lifecycle_calls s) state []))
@@ -49,7 +51,8 @@ let next_lifecycle g =
 
 let finish s g =
   let (h, a) = g in
-  let h' = Heap.set_field h s Field.Finished (Value.Finished Bool.True) in
+  let (o, arec) = Heap.get h s in
+  let h' = Heap.set h s (o, Arecord.set_finished arec Bool.True) in
   (h', a)
 
 let next_back g =
@@ -57,7 +60,8 @@ let next_back g =
   match a with
   | As.Bot | As.Exact [] -> []
   | As.Exact (s :: _) ->
-    let state = Value.get_state (Heap.get_field h s Field.State) in
+    let (_, arec) = Heap.get h s in
+    let state = Arecord.get_state arec in
     if State.le (State.from_list [State.Active]) state then
       [Action.Back s]
     else
@@ -69,8 +73,9 @@ let next_new g =
   match a with
   | As.Bot | As.Exact [] -> []
   | As.Exact (s :: _) ->
-    let state = Value.get_state (Heap.get_field h s Field.State) in
-    let pending = Value.get_pending (Heap.get_field h s Field.Pending) in
+    let (_, arec) = Heap.get h s in
+    let state = Arecord.get_state arec in
+    let pending = Arecord.get_pending arec in
     if State.le (State.from_list [State.Stopped]) state
     || State.le (State.from_list [State.Visible]) state then
       let add_cs cl cs =
@@ -83,12 +88,11 @@ let next_new g =
 let new_activity cl g =
   let (h, a) = g in
   let s = Site.make cl 0 in
-  let o = Object.from_list [
-      (Field.State, Value.State (State.from_list [State.Uninit]));
-      (Field.Pending, Value.Pending (Pending.from_list []));
-      (Field.Finished, Value.Finished (Bool.False))
-    ] in
-  let h_new = Heap.add h s o in
+  let oa = (Object.bot, { Arecord.state = State.from_list [State.Uninit];
+                          Arecord.pending = Pending.bot;
+                          Arecord.finished = Bool.False;
+                          Arecord.listeners = Sites.bot }) in
+  let h_new = Heap.add h s oa in
   let a_new = As.push a s in
   (h_new, a_new)
 
@@ -97,15 +101,16 @@ let next_click g =
   match a with
   | As.Bot | As.Exact [] -> []
   | As.Exact (s :: _) ->
-      let state = Value.get_state (Heap.get_field h s Field.State) in
-      if State.le (State.from_list [State.Active]) state then
-        let listeners = Value.get_sites (Heap.get_field h s Field.Listeners) in
-        let arg = Value.Sites (Sites.from_list [s]) in
-        let add_action listener actions =
-          (Action.Call ((listener, "onClick", [arg]), fun i -> i)) :: actions in
-        Sites.fold add_action listeners []
-      else
-        []
+    let (_, arec) = Heap.get h s in
+    let state = Arecord.get_state arec in
+    if State.le (State.from_list [State.Active]) state then
+      let listeners = Arecord.get_listeners arec in
+      let arg = Value.Sites (Sites.from_list [s]) in
+      let add_action listener actions =
+        (Action.Call ((listener, "onClick", [arg]), fun i -> i)) :: actions in
+      Sites.fold add_action listeners []
+    else
+      []
   | As.Top -> failwith "Android.next_click: Activity stack lost"
 
 let transfer_of_call app g gc action =

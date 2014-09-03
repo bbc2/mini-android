@@ -26,23 +26,23 @@ val set_field : t -> Site.t -> Field.t -> Value.t -> t
 val get_field : t -> Site.t -> Field.t -> Value.t
 
 (** Join the value associated with a site to update a heap. *)
-val add : t -> Site.t -> Object.t -> t
+val add : t -> Site.t -> Aobject.t -> t
 
 (** Set the object associated with a site in a heap. *)
-val set : t -> Site.t -> Object.t -> t
+val set : t -> Site.t -> Aobject.t -> t
 
 (** Get the object associated with a site in a heap. *)
-val get : t -> Site.t -> Object.t
+val get : t -> Site.t -> Aobject.t
 
 (** Fold on a heap. *)
-val fold : (Site.t -> Object.t -> 'a -> 'a) -> t -> 'a -> 'a
+val fold : (Site.t -> Aobject.t -> 'a -> 'a) -> t -> 'a -> 'a
 
 (** [filter p h] returns the map with all the bindings in [h] that satisfy
     predicate p. *)
-val filter : (Site.t -> Object.t -> bool) -> t -> t
+val filter : (Site.t -> Aobject.t -> bool) -> t -> t
 
 (** Build a heap from an association list. *)
-val from_list : (Site.t * Object.t) list -> t
+val from_list : (Site.t * Aobject.t) list -> t
 
 (** String representation of a heap. *)
 val to_string : t -> string

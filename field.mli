@@ -1,12 +1,7 @@
 (** Java and Android fields *)
 
-(** Type of a field. *)
-type t =
-  | J of string (** Mini Java field *)
-  | Pending (** Android [pending] field *)
-  | Finished (** Android [finished] field *)
-  | Listeners (** Android [listeners] field *)
-  | State (** Android [state] field *)
+(** Type of a Mini Java field. *)
+type t = string
 
 (** Total ordering between field. *)
 val compare : t -> t -> int

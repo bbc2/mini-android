@@ -18,11 +18,12 @@ let get_init_states app =
   let (manif, c) = app in
   let s_m = Site.make manif 0 in
   let h0 = Heap.from_list [
-      (s_m, Object.from_list [
-          (Field.State, Value.State (State.from_list [State.Uninit]));
-          (Field.Pending, Value.Pending (Pending.from_list []));
-          (Field.Finished, Value.Finished (Bool.False))
-        ])] in
+      (s_m, (Object.bot,
+             { Arecord.listeners = Sites.bot ;
+               Arecord.state = State.from_list [State.Uninit];
+               Arecord.pending = Pending.bot;
+               Arecord.finished = Bool.False; }
+            ))] in
   let g0 = (h0, As.from_list [s_m]) in
   InitSet.singleton g0
 

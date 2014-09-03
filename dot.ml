@@ -21,16 +21,36 @@ let record_of_pending = record_of_set Pending.fold (fun s -> s)
 
 let record_of_value v =
   match v with
-  | Value.Any | Value.None | Value.State _
-  | Value.String _ | Value.Finished _ -> Value.to_string v
+  | Value.Any | Value.None | Value.String _ -> Value.to_string v
   | Value.Sites ss -> record_of_sites ss
-  | Value.Pending p -> record_of_pending p
 
 let record_of_object o =
   let append f v s =
     Printf.sprintf "{%s|%s}%s%s"
       (Field.to_string f) (record_of_value v) (if s = "" then "" else "|") s in
-  Printf.sprintf "{%s}" (Object.fold append o "")
+  Printf.sprintf "%s" (Object.fold append o "")
+
+let record_of_arecord a =
+  Printf.sprintf "{~state|%s}|{~pending|%s}|{~finished|%s}|{~listeners|%s}"
+    (State.to_string (Arecord.get_state a))
+    (record_of_pending (Arecord.get_pending a))
+    (Bool.to_string (Arecord.get_finished a))
+    (record_of_sites (Arecord.get_listeners a))
+
+let record_of_aobject oa =
+  let (o, a) = oa in
+  let orec =
+    if Object.equal o Object.bot then
+      ""
+    else
+      Printf.sprintf "|%s" (record_of_object o) in
+  Printf.sprintf "%s%s" (record_of_arecord a) orec
+
+let record_of_heap h =
+  let append site oa s =
+    Printf.sprintf "{{%s}|{%s}}%s%s"
+      (Site.to_string site) (record_of_aobject oa) (if s = "" then "" else "|") s in
+  Printf.sprintf "%s" (Heap.fold append h "")
 
 let record_of_as a =
   let str = match a with
@@ -40,12 +60,6 @@ let record_of_as a =
         Printf.sprintf "%s%s%s" s (if s = "" then "" else " :: ") (Site.to_string site) in
       List.fold_left append "" al in
   Printf.sprintf "stack = %s" str
-
-let record_of_heap h =
-  let append site o s =
-    Printf.sprintf "{%s|%s}%s%s"
-      (Site.to_string site) (record_of_object o) (if s = "" then "" else "|") s in
-  Printf.sprintf "{{%s}}" (Heap.fold append h "")
 
 let record_of_global g =
   let (h, a) = g in

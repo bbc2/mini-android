@@ -15,8 +15,8 @@ let transfer_exn m v args l =
     let s = Value.get_str (Env.get e arg) in
     let add_str s p =
       Pending.add p s in
-    let pending = Value.Pending (Str.fold add_str s Pending.bot) in
-    let update s h = Heap.add_field h s Field.Pending pending in
+    let pending = (Str.fold add_str s Pending.bot) in
+    let update s h = Heap.add h s (Object.bot, Arecord.add_pending Arecord.bot pending) in
     let h_update = Sites.fold update ss Heap.bot in
     ((h_update, As.bot), Env.bot)
   | "addListener" ->
@@ -25,7 +25,8 @@ let transfer_exn m v args l =
       | _ -> failwith "Api.transfer_exn: Wrong number of arguments for addListener" in
     let ss = Value.get_sites (Env.get e v) in
     let update s h =
-      Heap.add_field h s Field.Listeners (Env.get e arg) in
+      Heap.add h s
+        (Object.bot, Arecord.add_listeners Arecord.bot (Value.get_sites (Env.get e arg))) in
     let h_update = Sites.fold update ss Heap.bot in
     ((h_update, As.bot), Env.bot)
   | _ -> raise Method_not_found

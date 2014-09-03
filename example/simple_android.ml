@@ -1,8 +1,6 @@
 let () =
   let s_ma = Site.make "MainActivity" 0 in
-  let o_ma = Object.from_list [
-      (Field.State, Value.State (State.from_list [State.Uninit]))
-    ] in
+  let o_ma = (Object.bot, Arecord.add_state Arecord.bot (State.from_list [State.Uninit])) in
   let h = Heap.from_list [(s_ma, o_ma)] in
   let a = As.from_list [s_ma] in
   let g = (h, a) in
