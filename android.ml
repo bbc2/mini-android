@@ -39,13 +39,13 @@ let lifecycle g s =
 let next_lifecycle g =
   let (_, a) = g in
   match a with
-  | As.Any -> failwith "Android.next_lifecycle: Activity stack lost"
-  | As.AS al ->
+  | As.Bot -> []
+  | As.Exact al ->
     (* Gather potential lifecycle calls for each activity in the stack *)
     let add_cs cs s =
       cs @ (lifecycle g s) in
     List.map (fun (c, a) -> Action.Call (c, a)) (List.fold_left add_cs [] al)
-  | As.None -> []
+  | As.Top -> failwith "Android.next_lifecycle: Activity stack lost"
 
 let finish s g =
   let (h, a) = g in
@@ -55,20 +55,20 @@ let finish s g =
 let next_back g =
   let (h, a) = g in
   match a with
-  | As.Any -> failwith "Android.next_back: Activity stack lost"
-  | As.AS (s :: _) ->
+  | As.Bot | As.Exact [] -> []
+  | As.Exact (s :: _) ->
     let state = Value.get_state (Heap.get_field h s Field.State) in
     if State.le (State.from_list [State.Active]) state then
       [Action.Back s]
     else
       []
-  | As.AS [] | As.None -> []
+  | As.Top -> failwith "Android.next_back: Activity stack lost"
 
 let next_new g =
   let (h, a) = g in
   match a with
-  | As.Any -> failwith "Android.next_new: Activity stack lost"
-  | As.AS (s :: _) ->
+  | As.Bot | As.Exact [] -> []
+  | As.Exact (s :: _) ->
     let state = Value.get_state (Heap.get_field h s Field.State) in
     let pending = Value.get_pending (Heap.get_field h s Field.Pending) in
     if State.le (State.from_list [State.Stopped]) state
@@ -78,7 +78,7 @@ let next_new g =
       Pending.fold add_cs pending []
     else
       []
-  | As.AS [] | As.None -> []
+  | As.Top -> failwith "Android.next_new: Activity stack lost"
 
 let new_activity cl g =
   let (h, a) = g in
@@ -95,8 +95,8 @@ let new_activity cl g =
 let next_click g =
   let (h, a) = g in
   match a with
-  | As.Any -> failwith "Android.next_click: Activity stack lost"
-  | As.AS (s :: _) ->
+  | As.Bot | As.Exact [] -> []
+  | As.Exact (s :: _) ->
       let state = Value.get_state (Heap.get_field h s Field.State) in
       if State.le (State.from_list [State.Active]) state then
         let listeners = Value.get_sites (Heap.get_field h s Field.Listeners) in
@@ -106,7 +106,7 @@ let next_click g =
         Sites.fold add_action listeners []
       else
         []
-  | As.AS [] | As.None -> []
+  | As.Top -> failwith "Android.next_click: Activity stack lost"
 
 let transfer_of_call app g gc action =
   let g' = match action with

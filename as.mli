@@ -2,9 +2,9 @@
 
 (** Type of an activity stack. *)
 type t =
-  | Any (** Any stack *)
-  | AS of Site.t list (** Exact stack *)
-  | None (** Undefined *)
+  | Bot (** Undefined *)
+  | Exact of Site.t list (** Stack without duplicates *)
+  | Top (** Any stack *)
 
 (** Total ordering on activity stacks. *)
 val compare : t -> t -> int

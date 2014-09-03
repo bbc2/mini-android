@@ -34,8 +34,8 @@ let record_of_object o =
 
 let record_of_as a =
   let str = match a with
-    | As.Any | As.None -> As.to_string a
-    | As.AS al ->
+    | As.Bot | As.Top -> As.to_string a
+    | As.Exact al ->
       let append s site =
         Printf.sprintf "%s%s%s" s (if s = "" then "" else " :: ") (Site.to_string site) in
       List.fold_left append "" al in

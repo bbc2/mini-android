@@ -1,43 +1,43 @@
 type t =
-  | Any
-  | AS of Site.t list
-  | None
+  | Bot
+  | Exact of Site.t list
+  | Top
 
 let compare = compare
 
 let equal = (=)
 
-let bot = None
+let bot = Bot
 
 let join a1 a2 =
   match (a1, a2) with
-  | (_, None) -> a1
-  | (None, _) -> a2
-  | (AS al1, AS al2) ->
+  | (_, Bot) -> a1
+  | (Bot, _) -> a2
+  | (Exact al1, Exact al2) ->
     if equal al1 al2 then
       a1
     else
-      Any
-  | (Any, _) | (_, Any) -> Any
+      Top
+  | (Top, _) | (_, Top) -> Top
 
 let push a s =
   match a with
-  | Any -> Any
-  | AS al ->
+  | Bot -> Exact [s]
+  | Exact al ->
       if List.mem s al then
-        Any (* potentially infinite stack *)
+        Top (* potentially infinite stack *)
       else
-        AS (s :: al)
-  | None -> AS [s]
+        Exact (s :: al)
+  | Top -> Top
 
-let from_list = List.fold_left push None
+let from_list = List.fold_left push Bot
 
 let to_string a =
   match a with
-  | Any -> "Any"
-  | AS al ->
+  | Bot -> "Bot"
+  | Exact al ->
     let al_str = List.fold_left
         (fun s o -> s ^ (if s = "" then "" else "; ") ^ (Site.to_string o))
         "" al in
     "[" ^ al_str ^ "]"
-  | None -> "None"
+  | Top -> "Top"
