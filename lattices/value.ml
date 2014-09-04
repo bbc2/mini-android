@@ -1,9 +1,9 @@
 module Value = struct
   type t =
-    | None
+    | Bot
     | String of Str.t
     | Sites of Sites.t
-    | Any
+    | Top
 
   let compare v1 v2 =
     match (v1, v2) with
@@ -11,16 +11,16 @@ module Value = struct
     | (String s1, String s2) -> Str.compare s1 s2
     | _ -> Pervasives.compare v1 v2
 
-  let bot = None
+  let bot = Bot
 
   let join v1 v2 =
     match (v1, v2) with
-    | (_, None) -> v1
-    | (None, _) -> v2
+    | (_, Bot) -> v1
+    | (Bot, _) -> v2
     | (Sites ss1, Sites ss2) -> Sites (Sites.join ss1 ss2)
     | (String s1, String s2) -> String (Str.join s1 s2)
     | (Sites _, _) | (String _, _)
-    | (Any, _) -> Any
+    | (Top, _) -> Top
 
   let get_str s =
     match s with
@@ -34,10 +34,10 @@ module Value = struct
 
   let to_string v =
     match v with
-    | None -> "None"
+    | Bot -> "Bot"
     | String s -> Str.to_string s
     | Sites ss -> Sites.to_string ss
-    | Any -> "Any"
+    | Top -> "Top"
 end
 
 include Value

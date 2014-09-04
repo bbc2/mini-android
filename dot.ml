@@ -21,7 +21,7 @@ let record_of_pending = record_of_set Pending.fold (fun s -> s)
 
 let record_of_value v =
   match v with
-  | Value.Any | Value.None | Value.String _ -> Value.to_string v
+  | Value.Bot | Value.Top | Value.String _ -> Value.to_string v
   | Value.Sites ss -> record_of_sites ss
 
 let record_of_object o =

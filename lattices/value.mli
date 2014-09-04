@@ -2,22 +2,12 @@
 
 (** Type of an abstract value. *)
 type t =
-  | None (** No value defined *)
+  | Bot (** No value defined *)
   | String of Str.t (** Potential string *)
   | Sites of Sites.t (** Potential sites *)
-  | Any (** Anything *)
+  | Top (** Anything *)
 
-(** Total ordering on values. *)
-val compare : t -> t -> int
-
-(** Test whether two values are equal. *)
-val equal : t -> t -> bool
-
-(** Undefined value. *)
-val bot : t
-
-(** Join of two values. *)
-val join : t -> t -> t
+include Lattice.S with type t := t
 
 (** Get the string a value can represent. *)
 val get_str : t -> Str.t
