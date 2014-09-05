@@ -1,6 +1,6 @@
 type t = string * int
 
-let compare = compare
+let compare = Pervasives.compare
 
 let make m l =
   (m, l)

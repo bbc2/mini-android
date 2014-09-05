@@ -1,29 +1,16 @@
 (** Abstract heap *)
 
-(** Type of an abstract heap. *)
-type t
-
-(** Total ordering on heaps. *)
-val compare : t -> t -> int
-
-(** Test whether two heaps are equal. *)
-val equal : t -> t -> bool
-
-(** Empty heap. *)
-val bot : t
-
-(** Join of two heaps. *)
-val join : t -> t -> t
+include Lattice.S
 
 (** Join the value associated with a site and a field with a new value to
     update a heap. *)
-val add_field : t -> Site.t -> Field.t -> Value.t -> t
+val add_field : t -> Site.t -> string-> Value.t -> t
 
 (** Set the value associated with a site and a field in a heap. *)
-val set_field : t -> Site.t -> Field.t -> Value.t -> t
+val set_field : t -> Site.t -> string -> Value.t -> t
 
 (** Get the value associated with a site and a field in a heap. *)
-val get_field : t -> Site.t -> Field.t -> Value.t
+val get_field : t -> Site.t -> string -> Value.t
 
 (** Join the value associated with a site to update a heap. *)
 val add : t -> Site.t -> Aobject.t -> t

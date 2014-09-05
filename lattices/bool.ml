@@ -23,5 +23,5 @@ module Bool = struct
     | Top -> "Top"
 end
 
-include Bool
 include Lattice.Extend(Bool)
+include Bool

@@ -26,8 +26,7 @@ let record_of_value v =
 
 let record_of_object o =
   let append f v s =
-    Printf.sprintf "{%s|%s}%s%s"
-      (Field.to_string f) (record_of_value v) (if s = "" then "" else "|") s in
+    Printf.sprintf "{%s|%s}%s%s" f (record_of_value v) (if s = "" then "" else "|") s in
   Printf.sprintf "%s" (Object.fold append o "")
 
 let record_of_arecord a =

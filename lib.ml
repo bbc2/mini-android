@@ -54,3 +54,6 @@ let rec list_compare compare l1 l2 =
         list_compare compare t1 t2
       else
         h
+
+let ($) n m =
+  if n = 0 then m else n

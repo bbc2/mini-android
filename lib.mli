@@ -35,3 +35,7 @@ end
 
 (** Total ordering on lists given a [compare] function on elements. *)
 val list_compare : ('a -> 'a -> int) -> 'a list -> 'a list -> int
+
+(** Comparison combinator.  [a $ b] returns b if a = 0 or a otherwise.  It can
+    be chained to construct a lexicographic order. *)
+val ($) : int -> int -> int

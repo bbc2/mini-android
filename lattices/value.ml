@@ -9,7 +9,7 @@ module Value = struct
     match (v1, v2) with
     | (Sites ss1, Sites ss2) -> Sites.compare ss1 ss2
     | (String s1, String s2) -> Str.compare s1 s2
-    | _ -> Pervasives.compare v1 v2
+    | (Bot, _) | (String _, _) | (Sites _, _) | (Top, _) -> Pervasives.compare v1 v2
 
   let bot = Bot
 
@@ -40,5 +40,5 @@ module Value = struct
     | Top -> "Top"
 end
 
-include Value
 include Lattice.Extend(Value)
+include Value

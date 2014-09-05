@@ -10,8 +10,10 @@ let bot = SiteSet.empty
 
 let join = SiteSet.union
 
+let le = SiteSet.subset
+
 let fold = SiteSet.fold
 
-let rec from_list = SiteSet.from_list
+let from_list = SiteSet.from_list
 
 let to_string = SiteSet.to_string Site.to_string

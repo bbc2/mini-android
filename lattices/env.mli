@@ -1,19 +1,9 @@
 (** Abstract environments *)
 
-(** Type of an abstract environment. *)
-type t
+include Lattice.S
 
 (** Type of a variable name. *)
 type var = string
-
-(** Test if two environments are equal. *)
-val equal : t -> t -> bool
-
-(** Empty environment, with all variables having [Value.bot] as abstract value. *)
-val bot : t
-
-(** Join of two environments. *)
-val join : t -> t -> t
 
 (** Get abstract value for a specific variable in the provided environment. *)
 val get : t -> var -> Value.t

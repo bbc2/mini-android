@@ -6,17 +6,7 @@ type t =
   | Exact of Site.t list (** Stack without duplicates *)
   | Top (** Any stack *)
 
-(** Total ordering on activity stacks. *)
-val compare : t -> t -> int
-
-(** Test whether two activity stacks are equal. *)
-val equal : t -> t -> bool
-
-(** Empty stack. *)
-val bot : t
-
-(** Join of two activity stacks. *)
-val join : t -> t -> t
+include Lattice.S with type t := t
 
 (** Push an activity on a stack. *)
 val push : t -> Site.t -> t

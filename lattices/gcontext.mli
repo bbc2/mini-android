@@ -1,13 +1,6 @@
 (** G-lattice *)
 
-(** Type of a G-lattice. *)
-type t
-
-(** Test whether two G-lattices are equal. *)
-val equal : t -> t -> bool
-
-(** Join of two G-lattices. *)
-val join : t -> t -> t
+include Lattice.S
 
 (** Join the global state associated with a context and global state to update
     a G-lattice. *)

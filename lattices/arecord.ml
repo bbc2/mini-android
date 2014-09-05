@@ -1,30 +1,23 @@
 module Arecord = struct
-  type t = { state : State.t ;
-             pending : Pending.t ;
-             finished : Bool.t ;
+  type t = { state : State.t;
+             pending : Pending.t;
+             finished : Bool.t;
              listeners : Sites.t }
 
   let compare a1 a2 =
-    let p = Pending.compare a1.pending a2.pending in
-    if p = 0 then
-      let s = State.compare a1.state a2.state in
-      if s = 0 then
-        let f = Bool.compare a1.finished a2.finished in
-        if f = 0 then
-          Sites.compare a1.listeners a2.listeners
-        else f
-      else s
-    else p
+    let { state = s1; pending = p1; finished = f1; listeners = l1 } = a1 in
+    let { state = s2; pending = p2; finished = f2; listeners = l2 } = a2 in
+    Lib.(State.compare s1 s2 $ Pending.compare p1 p2 $ Bool.compare f1 f2 $ Sites.compare l1 l2)
 
   let join a1 a2 =
-    { state = State.join a1.state a2.state ;
-      pending = Pending.join a1.pending a2.pending ;
-      finished = Bool.join a1.finished a2.finished ;
+    { state = State.join a1.state a2.state;
+      pending = Pending.join a1.pending a2.pending;
+      finished = Bool.join a1.finished a2.finished;
       listeners = Sites.join a1.listeners a2.listeners }
 
-  let bot = { state = State.bot ;
-              pending = Pending.bot ;
-              finished = Bool.bot ;
+  let bot = { state = State.bot;
+              pending = Pending.bot;
+              finished = Bool.bot;
               listeners = Sites.bot }
 
   let get_state a =
@@ -70,5 +63,5 @@ module Arecord = struct
 
 end
 
-include Arecord
 include Lattice.Extend(Arecord)
+include Arecord
