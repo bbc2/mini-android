@@ -1,19 +1,6 @@
 (** Android [pending] attribute *)
 
-(** Type of an abstract pending stack. *)
-type t
-
-(** Empty pending stack. *)
-val bot : t
-
-(** Total ordering on pending stacks. *)
-val compare : t -> t -> int
-
-(** Test whether two pending stacks are equal. *)
-val equal : t -> t -> bool
-
-(** Join of two pending stacks. *)
-val join : t -> t -> t
+include Lattice.S
 
 (** Push an activity on a pending stack. *)
 val add : t -> string -> t

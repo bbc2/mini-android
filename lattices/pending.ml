@@ -10,6 +10,8 @@ let bot = PSet.empty
 
 let join = PSet.union
 
+let le = PSet.subset
+
 let add p c =
   PSet.add c p
 
