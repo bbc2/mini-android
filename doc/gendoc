@@ -1,0 +1,19 @@
+#!/usr/bin/bash
+#
+# Generate HTML documentation from Markdown file hierarchy
+
+set -o errexit
+set -o nounset
+
+MD_DIR=doc
+HTML_DIR=html
+
+for md in "$MD_DIR"/**.md; do
+    mddir=$(dirname "$md")
+    mdbase=$(basename "$md")
+    htmldir=$HTML_DIR/${mddir#$MD_DIR}
+    htmlbase=${mdbase%.*}
+    html=$htmldir$htmlbase.html
+    mkdir -p "$htmldir"
+    omd "$md" > "$html"
+done
