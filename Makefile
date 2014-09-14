@@ -1,12 +1,14 @@
-.PHONY: all example doc ocamldoc clean
+.PHONY: all analyze example doc ocamldoc clean
 
-all: example doc
+all: analyze example doc
+
+analyze:
+	ocamlbuild -package cmdliner analyze.native
 
 example:
 	ocamlbuild example/simple.native
 	ocamlbuild example/simple_android.native
 	ocamlbuild example/parse.native
-	ocamlbuild example/analyze.native
 
 doc: ocamldoc
 	./doc/gendoc

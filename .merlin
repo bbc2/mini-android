@@ -5,3 +5,4 @@ B _build
 B _build/lang
 B _build/lattices
 B _build/example
+PKG cmdliner

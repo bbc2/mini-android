@@ -13,12 +13,14 @@ Dependencies
     documentation
   * `menhir` for the parser
   * `omd` for the documentation
+  * `cmdliner` for the command line tool `analyze`
 
 Documentation
 -------------
 
 Use `make doc` to generate the full documentation.  The main documentation ends
-up in `html` and the ocamldoc documentation in `ocaml.docdir`.
+up in `html` and the ocamldoc documentation in `ocaml.docdir`.  To read the
+documentation, open `html/index.html` in your browser.
 
 License
 -------

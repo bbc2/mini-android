@@ -1,6 +1,8 @@
 mini-android
 ============
 
+You should have come across and read `README.md`.
+
 Tutorial
 --------
 
